@@ -1,0 +1,48 @@
+.keyw {
+  display: inline-block;
+  border-radius: 5px 5px 5px 5px;
+  background: #a0a0a0;
+  padding: 0px 2px 0px 2px;
+  font-size: x-small;
+  color: white;
+  margin: 1px;
+  line-height: 18px;
+}
+
+.ft {
+  font-size: 12px;
+}
+
+.filter {
+  display: block;
+  border-radius: 5px 5px 5px 5px;
+  background: #495570;
+  padding: 10px 12px 10px 12px;
+  font-size: 25px;
+  text-align: center;
+  color: white;
+  margin-top: 15px;
+  line-height: 20px;
+  cursor: pointer;
+  cursor: hand;
+  box-shadow: 3px 2px 5px #888888;
+}
+
+.filter:hover {
+  background: #53627F;
+}
+
+#dec {
+  background: #efefef;
+  padding: 5px;
+}
+
+.ccc {
+  background: #53627F;
+  padding: 2px;
+  margin: 2px;
+}
+
+input[type=text] {
+  width: 100%;
+}

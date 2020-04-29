@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.audio.mapper.AudioMapper" >
+
+  <resultMap id="BaseResultMap" type="com.audio.entity.Music" >
+    <id column="idmusicinfo" property="idmusicinfo" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="artist" property="artist" jdbcType="VARCHAR" />
+    <result column="albun" property="album" jdbcType="VARCHAR" />
+    <result column="filedir" property="filedir" jdbcType="VARCHAR" />
+    <result column="infodir" property="infodir" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    idmusicinfo, title, artist,  album, filedir,infodir
+  </sql>
+  
+  
+  <insert id="addMusic" useGeneratedKeys="true" keyProperty="entity.idmusicinfo" keyColumn="idmusicinfo" parameterType="com.audio.entity.Music">
+	  insert into 
+	  musicinfo
+	  values(null, #{entity.title}, #{entity.artist}, #{entity.album}, #{entity.filedir}, "")
+  </insert>
+  
+   <insert id="addHash" parameterType="com.audio.entity.HashTable">
+	  insert into 
+	  hashtable
+	  values(null, #{hash}, #{id}, #{time})
+  </insert>
+  
+  <select id="getAllAudios" resultType="java.util.HashMap">
+  	SELECT 
+  	*
+  	FROM musicinfo
+  </select>
+  
+  <select id="getAudiosByIDs" resultType="java.util.HashMap">
+  	SELECT 
+  	*
+  	FROM musicinfo
+  	WHERE idmusicinfo in
+  		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+             #{item}  
+        </foreach> 
+  </select>
+ 
+  <!-- select id="searchAllAudios" resultType="com.audio.entity.Music">
+  	SELECT 
+  	*
+  	FROM hashtable
+  	WHERE hash 
+  	IN(linkHash) 
+  </select -->
+ 	
+ <select id="searchAllAudios" resultType="com.audio.entity.HashTable">
+      SELECT *
+      FROM  hashtable 
+      WHERE hash in 
+         <foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+             #{item}  
+         </foreach>  
+  </select>
+ 
+ 
+</mapper>
+  

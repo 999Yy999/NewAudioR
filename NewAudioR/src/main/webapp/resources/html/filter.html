@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<head>
+  <title>Filter</title>
+  <meta charset="utf-8">
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+  <meta http-equiv="pragma" content="no-cache" />
+  <link rel="shortcut icon" href="../imgs/ico.ico" />
+  <link rel="stylesheet" href="../css/commom.css">
+  <link rel="stylesheet" href="../css/table.css">
+  <link rel="stylesheet" href="../css/inputs.css">
+  <link rel="stylesheet" href="../css/filter.css">
+  <script defer src="../fonts/js/fontawesome-all.js"></script>
+  <script src="../data/keywords.js"></script>
+  <script src="../data/articles.js"></script>
+  <script src="../data/articles060.js"></script>
+  <script src="../data/articles060.js"></script>
+  <script src="../data/articles070.js"></script>
+  <script src="../data/articles080.js"></script>
+  <script src="../data/articles090.js"></script>
+  <script src="../data/articles100.js"></script>
+  <script src="../data/articles110.js"></script>
+  <script src="../js/jquery.js"></script>
+  <script>
+    var data = [];
+    function ToAppear(articleKeywords, keyword, logix, checkKeywords, ref, searchword) {
+      if (searchword != "") {
+        if (ref.toUpperCase().indexOf(searchword.toUpperCase()) == -1) { return false; }
+      }
+      if (logix == 1) {
+        for (var i = 0; i < checkKeywords.length; ++i) {
+          for (var z = 0; z < articleKeywords.length; ++z) {
+            if (checkKeywords[i] == articleKeywords[z]) { return true; }
+          }
+        }
+        return false;
+      }
+      if (logix == 2) {
+        for (var i = 0; i < checkKeywords.length; ++i) {
+          var found = false;
+          for (var z = 0; z < articleKeywords.length && !found; ++z) {
+            if (checkKeywords[i] == articleKeywords[z]) { found = true; }
+          }
+          if (!found) { return false; }
+        }
+        return true;
+      }
+      return true;
+    }
+    function DoTable() {
+      var data = [];
+      ReadArticles(data, $('#r1960').is(':checked') ? 1 : 0, $('#r1970').is(':checked') ? 1 : 0, $('#r1980').is(
+        ':checked') ? 1 : 0, $('#r1990').is(':checked') ? 1 : 0, $('#r2000').is(':checked') ? 1 : 0, $('#r2010').is(
+        ':checked') ? 1 : 0);
+      $("#table tbody tr").remove();
+      var checkKeywords = [];
+      for (var i = 0; i < keywords.length; ++i) {
+        var tempKeywords = document.getElementById(keywords[i][0]);
+        if (tempKeywords && tempKeywords.checked) {
+          checkKeywords.push(keywords[i])
+        }
+      }
+      var logix = $('input[name="logic"]:checked').val();
+      var tbody = document.getElementById('tbody');
+      var searchword = document.getElementById('searchword').value;
+      for (var i = 0; i < data.length; ++i) {
+        if (ToAppear(data[i][4], keywords, logix, checkKeywords, data[i][3], searchword)) {
+          var tr = document.createElement('tr');
+          var td = document.createElement('td');
+          td.className = "c";
+          td.innerHTML = data[i][1];
+          tr.appendChild(td);
+          td = document.createElement('td');
+          td.className = "i";
+          td.innerHTML = "<b>" + data[i][0] + "</b><br />" + data[i][3];
+          tr.appendChild(td);
+          td = document.createElement('td');
+          td.className = "i";
+          if (data[i][4].length > 0) {
+            for (var j = 0; j < data[i][4].length; ++j) {
+              var sp1 = document.createElement('span');
+              sp1.className = "keyw";
+              sp1.innerHTML = data[i][4][j][0];
+              td.appendChild(sp1);
+            }
+          }
+          tr.appendChild(td);
+          td = document.createElement('td');
+          td.className = "c ic";
+          if (data[i][2] != "") {
+            td.innerHTML = "<a href=\"" + data[i][2] + "\" target=\"_blank\"><i class=\"fa fa-link\"></i></a>";
+          }
+          tr.appendChild(td);
+          tbody.appendChild(tr);
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <script>
+    window.onload = function () {
+      var filter = document.getElementById('keys');
+      var change = (keywords.length) ? keywords[0][1] : 0;
+      for (var i = 0; i < keywords.length; ++i) {
+        if (keywords[i][1] != change) { change = keywords[i][1]; }
+        filter.innerHTML += "<input id=\"" + keywords[i][0] + "\" class=\"keyword\" type=\"checkbox\" name=\"" + keywords[i][0] + "\"><label for=\"" + keywords[i][0] + "\"><span><span></span></span>" + keywords[i][0] + "</label> ";
+      }
+      DoTable();
+      document.getElementById("p1960").textContent += "(" + articles060.length + ")";
+      document.getElementById("p1970").textContent += "(" + articles070.length + ")";
+      document.getElementById("p1980").textContent += "(" + articles080.length + ")";
+      document.getElementById("p1990").textContent += "(" + articles090.length + ")";
+      document.getElementById("p2000").textContent += "(" + articles100.length + ")";
+      document.getElementById("p2010").textContent += "(" + articles110.length + ")";
+      $('input[name=logic]').change(function () {
+        if (this.value == '3') {
+          $(".keyword").prop('disabled', true);
+          $("#keys").css('opacity', '0.4');
+        } else {
+          $(".keyword").prop('disabled', false);
+          $("#keys").css('opacity', '1');
+        }
+      });
+      $("#keys").css('opacity', '0.4');
+      $(".keyword").prop('disabled', true);
+    }
+  </script>
+  <div id="content">
+    <h1><span class="icon"><i class="fa fa-filter"></i></span> Filter</h1>
+    <p>
+      <fieldset>
+        <fieldset id="filter" class="ft">
+          <legend>Search word</legend>
+          <input type="text" name="searchword" id="searchword" placeholder="Ex.: Column generation">
+        </fieldset>
+        <fieldset id="filter" class="ft">
+          <legend>
+            <span><input id="logic_3" type="radio" name="logic" value="3" checked="checked"><label for="And"><span><span></span></span>All <i class="fa fa-database"></i></label></span>
+            <span><input id="logic_1" type="radio" name="logic" value="1"><label for="Or"><span><span></span></span>Or <i class="fa fa-key"></i></span></label></span>
+            <span><input id="logic_2" type="radio" name="logic" value="2"><label for="And"><span><span></span></span>And <i class="fa fa-key"></i></label></span>
+          </legend>
+          <div id="keys"></div>
+        </fieldset>
+        <fieldset class="ft">
+          <legend>Years</legend>
+          <input id="r1960" type="checkbox" name="r1960\"><label for="r1960"><span><span id="p1960">1960 - 1969 </span></span></label>
+          <input id="r1970" type="checkbox" name="r1970\"><label for="r1970"><span><span id="p1970">1970 - 1979 </span></span></label>
+          <input id="r1980" type="checkbox" name="r1980\"><label for="r1980"><span><span id="p1980">1980 - 1989 </span></span></label>
+          <input id="r1990" type="checkbox" name="r1990\"><label for="r1990"><span><span id="p1990">1990 - 1999 </span></span></label>
+          <input id="r2000" type="checkbox" name="r2000\"><label for="r2000"><span><span id="p2000">2000 - 2009 </span></span></label>
+          <input id="r2010" type="checkbox" name="r2010\"><label for="r2010"><span><span id="p2010">2010 - 2020 </span></span></label>
+        </fieldset>
+        <p><div class="filter" onclick="DoTable();"><i class="fa fa-search"></i></div></p>
+      </fieldset>
+    </p>
+    <div class="shadow-z-1">
+      <table id="table" class="table table-hover">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Article</th>
+            <th width="40%">Keywords</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

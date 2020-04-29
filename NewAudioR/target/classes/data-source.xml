@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- spring mvc 整合 mybatis -->
+    <!-- 事务管理-->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 用来启用基于注解的事务 -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+    
+    <!-- 引入配置文件 -->
+    <context:property-placeholder location="classpath:config.properties" />
+<!-- 
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:config.properties" />
+	</bean> -->
+	<!-- 阿里连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+	</bean>
+	
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:mapperconfig/*.xml"/>
+	</bean>
+	
+	<!-- DAO接口所在包名，Spring会自动查找其下自动扫描将Mapper接口生成代理注入到Spring-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.audio.mapper" />
+	</bean>
+
+   <!-- 基于配置的事务管理 -->
+    <aop:config>
+		<aop:pointcut id="serviceMethod1" expression="execution(* com.audio.service.*.*(..))" />
+		<aop:pointcut id="serviceMethod2" expression="execution(* com.audio.mapper.*.*(..))" />
+		<aop:advisor pointcut-ref="serviceMethod1" advice-ref="txAdvice" />
+		<aop:advisor pointcut-ref="serviceMethod2" advice-ref="txAdvice" />
+	</aop:config>
+    
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="search*" propagation="SUPPORTS"	rollback-for="Exception" />
+			<tx:method name="select*" propagation="SUPPORTS"	rollback-for="Exception" />
+			<tx:method name="insert*" propagation="REQUIRED"	rollback-for="Exception" />
+			<tx:method name="add*"    propagation="REQUIRED"	rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED"	rollback-for="Exception" />
+			<tx:method name="save*"   propagation="REQUIRED"	rollback-for="Exception" />
+			<tx:method name="delete*" propagation="REQUIRED"	rollback-for="Exception" />
+			<tx:method name="init*"   propagation="REQUIRED"	rollback-for="Exception" />
+			<tx:method name="submit*" propagation="REQUIRED"	rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+</beans>

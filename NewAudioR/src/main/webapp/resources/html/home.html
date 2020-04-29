@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+  <title>Home</title>
+  <meta charset="utf-8">
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+  <meta http-equiv="pragma" content="no-cache" />
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="shortcut icon" href="../imgs/ico.ico" />
+  <!-- 
+  <script src="../data/datasets.js"></script>
+  <script src="../data/generators.js"></script>
+  <script src="../data/keywords.js"></script>
+  <script src="../data/articles.js"></script>
+  <script src="../data/articles060.js"></script>
+  <script src="../data/articles070.js"></script>
+  <script src="../data/articles080.js"></script>
+  <script src="../data/articles090.js"></script>
+  <script src="../data/articles100.js"></script>
+  <script src="../data/articles110.js"></script>
+   -->
+</head>
+<body>
+  <!-- 
+  <script>
+    window.onload = function () {
+      var data = [];
+      ReadArticles(data, true, true, true, true, true, true);
+      document.getElementById("sets").textContent = "Literature Benchmarks: " + sets.length + "";
+      document.getElementById("generators").textContent = "Instance Generators: " + generators.length + "";
+      document.getElementById("articles").textContent = "Articles: " + GetArticlesCount() + "";
+      var values = data.map(function (d) { return d[1]; });
+      document.getElementById("years").textContent = "from " + Math.min.apply(null, values) + " to " + Math.max.apply(null, values);
+    }
+  </script>
+   -->
+  <div class="canvas">
+    <div id="title">Audio Recognizition</div>
+    <div id="articles">Musics:38</div>   <!-- 之后动态获取数据到这里 -->
+    <!-- 
+    <div id="years"></div>
+    <div id="sets"></div>
+    <div id="generators"></div>
+     -->
+  </div>
+</body>
+</html>

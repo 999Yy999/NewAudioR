@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<head>
+  <title>Literature review</title>
+	<meta charset="utf-8">
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+	<meta http-equiv="pragma" content="no-cache" />
+  <link rel="shortcut icon" href="../imgs/ico.ico" />
+  <link rel="stylesheet" href="../css/commom.css">
+  <link rel="stylesheet" href="../css/quick.css">
+  <script defer src="../fonts/js/fontawesome-all.js"></script>
+	<script src="../data/datasets.js"></script>
+	<script src="../data/keywords.js"></script>
+	<script src="../data/articles.js"></script>
+	<script src="../data/articles060.js"></script>
+  <script src="../data/articles060.js"></script>
+	<script src="../data/articles070.js"></script>
+	<script src="../data/articles080.js"></script>
+	<script src="../data/articles090.js"></script>
+	<script src="../data/articles100.js"></script>
+	<script src="../data/articles110.js"></script>
+  <script src="../js/commom.js"></script>
+	<script src="../js/jquery.js"></script>
+  <script src="../js/d3.js"></script>
+  <script src="../js/chart1.js"></script>
+  <script src="../js/chart2.js"></script>
+</head>
+<body>
+<script>
+  var data = [];
+  function dokeys(obj, panel, a, b, c) {
+    obj.forEach(function(d1) {
+      var article = document.createElement('span');
+      article.id = a+d1[0];
+      article.className = "label";
+      article.innerHTML = d1[0];
+      $(panel).append(article);
+      $(b+d1[0]).mouseover(function(){
+        var x = $(c+d1[0]);
+        x.css("opacity", "1");
+        x.css("background-color", "#c0c0c0");
+      });
+      $(b+d1[0]).mouseout(function(){
+        var x = $(c+d1[0]);
+        x.css("opacity", "0.5");
+        x.css("background-color", "white");
+      });
+      $(c+d1[0]).mouseout(function(){
+        $(this).css("opacity", "0.5");
+        $(b+d1[0]).css("background-color", "white");
+      });
+      $(c+d1[0]).mouseover(function(d){
+        $(this).css("opacity", "1");
+        $(b+d1[0]).css("background-color", "#c0c0c0");
+      });
+    });
+    article = document.createElement('span');
+    article.className = "clear";
+    $(panel).append(article);
+  }
+	window.onload=function() {
+    var temp = parseInt(getQueryVariable("type"));
+    var type = !isNaN(temp) ? temp: "1";
+    temp = parseInt(getQueryVariable("size"));
+    var size = !isNaN(temp) ? temp / 100 : 0.9;
+    size = parseInt(window.innerHeight * size);
+    temp = parseInt(getQueryVariable("order"));
+    var order = !isNaN(temp) ? temp: 1;
+    temp = parseFloat(getQueryVariable("tension"));
+    var tension = !isNaN(temp) ? temp/100 : "1";
+    temp = getQueryVariable("dec");
+    var dec = (typeof temp !== 'undefined') ? temp :  "111111";
+    temp = getQueryVariable("print");
+    var print = (typeof temp !== 'undefined') ? temp :  0;
+    var temp = parseInt(getQueryVariable("diameter"));
+    var diameter = !isNaN(temp) ? temp : 2000;
+    ReadArticles(data, true, true, true, true, true, true);
+    data.forEach(function(d1) {
+      var article = document.createElement('span');
+      article.id = d1[0];
+      article.className = "articleBox";
+      for (i=0; i < d1[4].length; ++i) { article.className += " k" + d1[4][i][0]; }
+      for (i=0; i < d1[5].length; ++i) { article.className += " s" + d1[5][i]; }
+      if (d1[2]) {
+          var link = document.createElement('a');
+          link.setAttribute('href', d1[2]);
+          link.setAttribute('target', '_blank');
+          link.innerHTML = d1[0];
+          article.append(link);
+      }
+      else { article.innerHTML = d1[0]; }
+      $("#rightPanel").append(article)
+    });
+    var article = document.createElement('span');
+    article.className = "clear";
+    $("#rightPanel").append(article);
+    dokeys(keywords, "#panelContent", "k", "#k", ".k");
+    dokeys(sets, "#panelContent2", "s", "#s", ".s");
+  }
+</script>
+<div id="content-wrapper">
+	<div id="leftPanel">
+    <div id="leftWrapperl">
+      <div class="title">
+        <h1><span class="icon"><i class="fa fa-key"></i></span> Keywords</h1>
+      </div>
+      <div id="panelContent"></div>
+      <div class="clear"></div>
+      <div class="title">
+        <h1><span class="icon"><i class="fa fa-puzzle-piece"></i></span> Data sets</h1>
+      </div>
+      <div id="panelContent2"></div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div id="rightPanel"></div>
+  <div class="clear"></div>
+</div>
+</body>
+</html>
+

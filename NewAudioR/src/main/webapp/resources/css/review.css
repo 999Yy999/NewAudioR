@@ -1,0 +1,74 @@
+#leftPanel {
+  background-color: #495570;
+  border: 0px;
+  width: 200px;
+  height: 100vh;
+  float: left;
+  text-align: center;
+}
+
+.panelContent {
+  margin: 5px;
+  position: absolute;
+  width: 190px;
+  color: #e1f2fe;
+  text-align: left;
+}
+
+#homeFrame {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+  box-sizing: border-box;
+}
+
+.table_aleft {
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: auto;
+}
+
+.table_aright {
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: auto;
+  margin-right: 0px;
+  margin-left: auto;
+}
+
+#printablefield {
+  text-align: right;
+}
+
+#rightPanel {
+  margin-left: 200px;
+}
+
+.run {
+  margin: 5px;
+  display: block;
+  border-radius: 5px 5px 5px 5px;
+  background: #FFF;
+  padding: 10px 12px 10px 12px;
+  font-size: 25px;
+  text-align: center;
+  color: #495570;
+  cursor: pointer;
+  cursor: hand;
+  box-shadow: 3px 2px 5px #2a2a2a;
+}
+
+.run:hover {
+  background: #eeeeee;
+  color: #495570;
+}
