@@ -44,10 +44,11 @@ public class AudioController {
 	}
 	
 	//跳转到新界面
-	@RequestMapping(value="/search", method=RequestMethod.GET)
-	public String search(){
-		return "search";
+	@RequestMapping(value="/searchpage", method=RequestMethod.GET)
+	public String searchpage(){
+		return "searchpage";
 	}
+	
 	
 	//显示音乐列表
 	@RequestMapping(value="/listmusic", method=RequestMethod.GET)
@@ -79,9 +80,19 @@ public class AudioController {
 		return "result";
 	}
 	
+	//检索样本音乐 支持重定向
+	@RequestMapping(value="/search", method=RequestMethod.GET)
+	public String searchr(String filename, Model model){
+		//完成搜索功能
+		List<HashMap<String, Object>> audios=audioService.search(filename);
+		model.addAttribute("audios", audios);
+		
+		return "result";
+	}
+	
 	/*
 	@RequestMapping(value="/search", method=RequestMethod.GET)
-	public String search(String filename, Model model){
+	public String search1(String filename, Model model){
 		//完成搜索功能
 		List<HashMap<String, Object>> audios=audioService.search(filename);
 		model.addAttribute("audios", audios);

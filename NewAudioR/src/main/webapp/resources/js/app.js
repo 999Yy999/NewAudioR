@@ -143,7 +143,7 @@ function createDownloadLink(blob) {
 	//add the save to disk link to li
 	li.appendChild(link);
 	
-	add();
+	add(blob);
 	/*//
 	document.getElementById("rid").innerHTML = li.value;
 	alert(li.value);
@@ -202,21 +202,36 @@ function createDownloadLink(blob) {
 }
 
 var num=0;
-function add(){
+function add(blob){
 	num++;
 	var tr=document.createElement("tr");
+	// 新建一项
 	var id=document.createElement("td");
 	var dur=document.createElement("td");
-	var noise=document.createElement("td");
-	var url=document.createElement("td");
-	var a=document.createElement("a");
+	//var noise=document.createElement("td");
+	//var url=document.createElement("td");
+	var play=document.createElement("td");
+	var search=document.createElement("td");
+	//var a=document.createElement("a");
+	//var aplay=document.createElement("a");
 	
-	a.href=url;
-	a.innerHTML="下载";
+	var filename = new Date().toISOString();
+	
+	
+	//a.href=au.src;
+	///a.download=filename+".wav";
+	//a.innerHTML="下载";
+	
+	//aplay.href=au.src;
+	//aplay.innerHTML="跳转播放";
+	
+	//play.href=au.src;
+	//play.innerHTML='跳转播放';
+	
+	//id内容
 	id.innerHTML=num;
 	dur.innerHTML=au.duration;
-	url.innerHTML=au.src;
-	
+	//url.innerHTML=au.src;
 	
 	//xm.innerHTML="第"+num+"学生";
 	//var search=document.createElement("td");
@@ -224,9 +239,34 @@ function add(){
 	var tab=document.getElementById("table");
 	var tbody=document.getElementById("tbody");
 	tbody.appendChild(tr);
+	//id加到表里
 	tr.appendChild(id);
 	tr.appendChild(dur);
-	tr.appendChild(noise);
-	tr.appendChild(url);
-	url.appendChild(a);
+	//tr.appendChild(noise);
+	//tr.appendChild(url);
+	tr.appendChild(play);
+	//url.appendChild(a);
+	play.appendChild(au);
+	
+	var upload = document.createElement('a');
+	//upload.href="#";
+	upload.innerHTML = "Search";
+	upload.addEventListener("click", function(event){
+		  var xhr=new XMLHttpRequest();
+		  //设置响应返回的数据格式
+		  //xhr.responseType = "document";
+		  //注册相关事件回调处理函数，onload当请求成功完成时触发，此时xhr.readystate=4
+		  xhr.onload=function(e) {
+		      if(this.readyState === 4) {
+		          //console.log("Server returned: ",e.target.responseText);
+		          document.getElementById("results").innerHTML=e.target.responseText;
+		      }
+		  };
+		  var fd=new FormData();
+		  fd.append("audio_data",blob, filename);
+		  xhr.open("POST","record2local",true);  //异步
+		  xhr.send(fd);
+	})
+	tr.appendChild(search);
+	search.appendChild(upload);
 }

@@ -4,28 +4,46 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="${css }/commom.css">
+	<link rel="stylesheet" href="${css }/table.css">
+	<link rel="stylesheet" href="${css }/inputs.css">
+	<link rel="stylesheet" href="${css }/filter.css">
+	<script defer src="${fonts }/js/fontawesome-all.js"></script>
 </head>
 <body>
 
-<table border="1">
-	<tr><td>id</td><td>title</td><td>artist</td><td>album</td><td>filedir</td><td>infodir</td><td>caozuo</td></tr>
-	<c:forEach items="${audios }" var="audio">
+<div class="shadow-z-1">
+  <table id="table" class="table-table-hover">
+	<thead>
 		<tr>
-			<td>${audio.idmusicinfo }</td>
-			<td>${audio.title }</td>
-			<td>${audio.artist }</td>
-			<td>${audio.album }</td>
-			<td>${audio.filedir }</td>
-			<td>${audio.infodir }</td>
-			<td>
-				<a href="deleteAudio?id=${audio.idmusicinfo }">delete</a>
-			</td>
+		 <th>编号</th>
+		 <th>歌名</th>
+		 <th>歌手</th>
+		 <th>专辑</th>
+		 <th>文件路径</th>
+		 <th>相似度</th>
+		 <th>操作</th>
 		</tr>
-	</c:forEach>
-	
-</table>
+	</thead>
+	<tbody id="tbody">
+		<c:forEach items="${audios }" var="audio">
+			<tr>
+			 <td>${audio.idmusicinfo }</td>
+			 <td>${audio.title }</td>
+			 <td>${audio.artist }</td>
+			 <td>${audio.album }</td>
+			 <td>${audio.filedir }</td>
+			 <td>${audio.infodir }</td>
+			 <td>
+				<a href="deleteAudio?id=${audio.idmusicinfo }">delete</a>
+			 </td>
+			</tr>
+		</c:forEach>
+	</tbody>
+   </table>
+</div>
 
 </body>
 </html>

@@ -12,20 +12,36 @@
 .ft {
   font-size: 12px;
 }
-
-.filter {
-  display: block;
+/*自己加的*/
+fieldset {
   border-radius: 5px 5px 5px 5px;
-  background: #495570;
+  background: #4a1616eb;
   padding: 10px 12px 10px 12px;
-  font-size: 25px;
+  font-size: 20px;
+  font-weight:bold;
   text-align: center;
   color: white;
   margin-top: 15px;
   line-height: 20px;
   cursor: pointer;
   cursor: hand;
-  box-shadow: 3px 2px 5px #888888;
+  box-shadow: 3px 2px 5px #a59d9d;
+}
+
+.filter {
+  /*display: block;*/
+  border-radius: 5px 5px 5px 5px;
+  background: #4a1616eb;
+  padding: 10px 12px 10px 12px;
+  font-size: 20px;
+  font-weight:bold;
+  text-align: center;
+  color: white;
+  margin-top: 15px;
+  line-height: 20px;
+  cursor: pointer;
+  cursor: hand;
+  box-shadow: 3px 2px 5px #a59d9d;
 }
 
 .filter:hover {
