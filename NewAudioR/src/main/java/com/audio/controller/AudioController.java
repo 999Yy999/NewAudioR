@@ -49,6 +49,23 @@ public class AudioController {
 		return "searchpage";
 	}
 	
+	//跳转到新界面
+	@RequestMapping(value="/test", method=RequestMethod.GET)
+	public String testpage(){
+		return "test";
+	}
+		
+	//测试
+	@RequestMapping(value="/test", method=RequestMethod.POST)
+	public String test(String time, int fre, int sample, Model model){
+		//完成搜索功能
+		//List<HashMap<String, Object>> audios=audioService.search(filename);
+		double[] zql=audioService.test(time, fre, sample);
+		//model.addAttribute("audios", audios);
+		System.out.println("time:"+time+",fre:"+fre+",sample:"+sample);
+		return "result";
+	}
+	
 	
 	//显示音乐列表
 	@RequestMapping(value="/listmusic", method=RequestMethod.GET)
@@ -74,7 +91,7 @@ public class AudioController {
 	@RequestMapping(value="/search", method=RequestMethod.POST)
 	public String search(String filename, Model model){
 		//完成搜索功能
-		List<HashMap<String, Object>> audios=audioService.search(filename);
+		List<HashMap<String, Object>> audios=audioService.search(filename,null);
 		model.addAttribute("audios", audios);
 		
 		return "result";
@@ -84,7 +101,7 @@ public class AudioController {
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public String searchr(String filename, Model model){
 		//完成搜索功能
-		List<HashMap<String, Object>> audios=audioService.search(filename);
+		List<HashMap<String, Object>> audios=audioService.search(filename,null);
 		model.addAttribute("audios", audios);
 		
 		return "result";

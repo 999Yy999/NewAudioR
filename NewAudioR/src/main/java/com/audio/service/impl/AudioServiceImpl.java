@@ -7,12 +7,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,6 +35,7 @@ import com.audio.entity.HashTable;
 import com.audio.entity.Music;
 import com.audio.mapper.AudioMapper;
 import com.audio.service.AudioService;
+import com.audio.util.ClipAudioFile;
 import com.audio.util.FileHandle;
 import com.audio.util.Hash;
 import com.audio.util.ReadAudioFile;
@@ -54,14 +57,18 @@ public class AudioServiceImpl implements AudioService{
 	List<HashMap.Entry<Long, Integer>> infoIds;
 	long maxId = -1;
     int maxCount = -1;
+    Music music=new Music();
 	//D:\Z_毕设\Others Project\Audio-Fingerprinting-master\songs\泡沫\泡沫4s.wav
   
 	@Override
-	public List<HashMap<String,Object>> search(String filename) {
+	public List<HashMap<String,Object>> search(String filename, float[] data1) {
 		File file=new File(filename);
+		float data[];
+		
 		ReadAudioFile readFile = new ReadAudioFile(); 
 		try {
-			float data[]=readFile.readFile(file);
+			if (data1!=null){data=data1;}
+			else data=readFile.readFile(file);
 			Fingerprint fp=new Fingerprint(data, fs);
 			setHashTime(fp);
 		} catch (Exception e) {
@@ -251,8 +258,188 @@ public class AudioServiceImpl implements AudioService{
 		return audios;
 	}
 	
-	@Override
+	/*@Override
 	public void startrecord(){
+		???what??
+	}*/
+
+	@Override
+	public double[] test(String time, int fre, int sample) {
+		// TODO Auto-generated method stub
+		int success1=0, success2=0, failure1=0, failure2=0;   //记录器
+		String path="D:\\Z_毕设\\音频素材\\wav";
+		File file = new File(path);
+        File[] files = file.listFiles();    //目录里的文件
+		double[] zql = null;                //两个准确率
+		String filename = null;             //选中的样本文件名
+		// 准备sample个样本
+		Random random=new Random();
+		for (int i=0; i<sample; i++) {
+			//随机选择一个音频文件
+			int id=random.nextInt(sample);           //[0,9]
+			if (files!=null&&files.length > 0) {
+                filename=files[id].getName();    //我等你到三十五岁}}我等你到三十五岁}}晃儿.wav
+            } 
+			System.out.println("filename:"+filename);
+			//分隔符提取歌曲属性
+			getTabs(filename);
+			filename=path+"\\"+filename;
+			//随机确定截取音频时长
+			int mode = 0;
+			int n1 = 0,n2 = 0;    //[n1,n2]随机数   
+			int durtime;
+			switch (time){
+			case "mode1": mode=1; break;
+			case "mode2": mode=2; break;
+			case "mode3": mode=3; break;
+			}
+			if (mode==1){n1=1; n2=4;}
+			if (mode==2){n1=4; n2=10;}
+			if (mode==3){n1=10; n2=20;}
+			//durtime=random.nextInt() * (n2-n1)+n1;
+			durtime=random.nextInt(n2-n1)+n1;
+			System.out.println("----------durtime:"+durtime);
+			//随机确定截取位置
+			int pos=random.nextInt(5)+1;   //[1,5]
+			//开始截取+叠加 返回处理好的数据data
+			float data[]=cut2short(filename, durtime, pos, fre);
+			//search测试混合信号
+			List<HashMap<String, Object>> audios=search(filename,data);
+			// 测试结果与源文件(名称+歌手+专辑)对比
+			int flag=0;  //判断是否在top1
+			for (int k = 0; k < audios.size(); k++) {
+				int j=0;
+				//long idmusicinfo = 0;
+				String title = null,artist=null,album=null;
+				int samerate,maxrate=0;
+				Map<String, Object> map = audios.get(i);
+				Iterator iterator = map.keySet().iterator();
+				while (iterator.hasNext()) {
+					String string = (String) iterator.next();
+					System.out.println("string:"+string);
+					if (j==1){
+						artist=map.get(string).toString();
+					}
+					if (j==2){
+						album=map.get(string).toString();
+					}
+					if (j==5){
+						title=map.get(string).toString();
+						System.out.println("title:"+title);
+					}
+					if (j==4){
+						samerate=Integer.parseInt((String) map.get(string));
+						System.out.println("samerate:"+samerate);
+						//找出相似度最大的
+						if (samerate>maxrate){
+							maxrate=samerate;
+						}
+					}
+					j++;
+				}
+				if (music.getTitle()==title && music.getArtist()==artist && music.getAlbum() == album){
+					/*if (Integer.parseInt(music.getInfodir())==maxrate){
+						success1++;
+						flag=1;
+					}*/
+					/*if (flag==0){
+						failure1++;
+					}*/
+					success2++;
+				}
+			}
+			
+		}
+			
+		
+		// 6.计数
+		// 7.计算准确率
+		zql[0]=success1/sample;
+		zql[1]=success2/sample;
+		
+		return zql;
+	}
+	
+	// 2.模拟生成fre频率的白噪声
+	// 3.叠加成混合信号
+	//将sample个样本按mode要求剪辑，存入文件，返回文件名称
+	float[] cut2short(String filename, int durtime, int pos, int fre){
+		float[] data=null;
+		ClipAudioFile clipfile=new ClipAudioFile();
+		try {
+			//截取+叠加
+			System.out.println("--------filename:"+filename+",durtime:"+durtime+",pos:"+pos+",fre:"+fre+"----------");
+			data=clipfile.clipFile(filename, durtime, pos, fre);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return data;
+	}
+	/*
+	//获得不重复的[0-n)的随机数
+	//获取随机数，效率很高的一种方法
+	public static int[] getRandomNumber(int n){
+	    int[] x = new int[n];
+	    for(int i = 0; i < n; i++)
+	    {
+	      x[i] = i;
+	    }
+	    Random r = new Random();
+	    for(int i = 0; i < n; i++)
+	    {
+	      int in = r.nextInt(n - i) + i;
+	      int t = x[in];
+	      x[in] = x[i];
+	      x[i] = t;
+	    }
+	    System.out.println(Arrays.toString(x));
+	    return x;
+	 }
+	
+	//获得随机数的文件
+	//获取随机文件顺序
+	private static String[] getRandomFile(String path, int[] x) {
+		int k=0,j=0;
+		String[] randomfile = new String[x.length];
+        try {
+            File file = new File(path);
+            File[] files = file.listFiles();
+            for (int rnum : x) {
+	            if (files!=null&&files.length > 0) {
+	                randomfile[j++]=files[rnum].getName();
+	            } else {
+	                return null;
+	            }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return randomfile;
+    }
+
+	*/
+	
+	private void getTabs(String filename){
+		String[] strings = filename.split("}}");
+		if(strings.length < 3){
+			music.setTitle(filename);
+            music.setAlbum("");
+            music.setArtist("");
+            return;
+        }
+        music.setTitle(strings[0]);
+        music.setAlbum(strings[1]);
+        //remove .wav
+        int len = strings[2].length();
+        music.setArtist(strings[2].substring(0,len - 4));
+	}
+	
+	@Override
+	public void startrecord() {
+		// TODO Auto-generated method stub
 		
 	}
 }
