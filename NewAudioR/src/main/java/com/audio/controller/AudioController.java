@@ -63,6 +63,7 @@ public class AudioController {
 		double[] zql=audioService.test(time, fre, sample);
 		//model.addAttribute("audios", audios);
 		System.out.println("time:"+time+",fre:"+fre+",sample:"+sample);
+		
 		return "result";
 	}
 	

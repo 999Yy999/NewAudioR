@@ -247,7 +247,7 @@ function add(blob){
 	tr.appendChild(play);
 	//url.appendChild(a);
 	play.appendChild(au);
-	
+
 	var upload = document.createElement('a');
 	//upload.href="#";
 	upload.innerHTML = "Search";

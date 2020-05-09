@@ -20,8 +20,9 @@
   <script src="${js }/jquery.js"></script>
   <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
   <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-  <script src="${js }/app.js"></script>
+  <script src="${js }/testresult.js"></script>
   <script type="text/javascript" src="${js }/jquery-1.8.2.js"></script>
+  <!-- 
   <script>
   	function DoTable(){
   		var uval = $("#username").val();
@@ -35,6 +36,7 @@
 		});
   	}
   </script>
+   -->
 </head>
 <body>
   <div id="content">
@@ -48,28 +50,30 @@
         </fieldset>
         <fieldset class="ft">
           <legend>时长</legend>
-          <input id="tl4" type="checkbox" name="time" value="mode1"><label for="r1960"><span><span id="p1960">小于4s</span></span></label>
-          <input id="t410" type="checkbox" name="time" value="mode2"><label for="r1970"><span><span id="p1970">大于等于4秒&小于10秒</span></span></label>
-          <input id="th10" type="checkbox" name="time" value="mode3"><label for="r1980"><span><span id="p1980">大于等于10秒</span></span></label>
+          <input id="tl4" type="radio" name="time" value="mode1"><label for="r1960"><span><span id="p1960">小于4s</span></span></label>
+          <input id="t410" type="radio" name="time" value="mode2" checked="checked"><label for="r1970"><span><span id="p1970">大于等于4秒&小于10秒</span></span></label>
+          <input id="th10" type="radio" name="time" value="mode3"><label for="r1980"><span><span id="p1980">大于等于10秒</span></span></label>
         </fieldset>
         <fieldset class="ft">
           <legend>白噪音强度</legend>
-          <input id="f2" type="checkbox" name="fre" value="2"><label for="f2"><span><span id="f2">2Hz</span></span></label>
-          <input id="f10" type="checkbox" name="fre" value="10"><label for="f10"><span><span id="f10">10Hz</span></span></label>
-          <input id="f20" type="checkbox" name="fre" value="20"><label for="f20"><span><span id="f20">20Hz</span></span></label>
-          <input id="f30" type="checkbox" name="fre" value="30"><label for="f30"><span><span id="f30">30Hz</span></span></label>
+          <input id="f2" type="radio" name="fre" value="2"><label for="f2"><span><span id="f2">2Hz</span></span></label>
+          <input id="f10" type="radio" name="fre" value="10"><label for="f10"><span><span id="f10">10Hz</span></span></label>
+          <input id="f20" type="radio" name="fre" value="20" checked="checked"><label for="f20"><span><span id="f20">20Hz</span></span></label>
+          <input id="f30" type="radio" name="fre" value="30"><label for="f30"><span><span id="f30">30Hz</span></span></label>
         </fieldset>
         <fieldset class="ft">
           <legend>测试样例数</legend>
-          <input id="s100" type="checkbox" name="sample" value="100"><label for="s100"><span><span id="p1960">100</span></span></label>
-          <input id="s200" type="checkbox" name="sample" value="200"><label for="s200"><span><span id="p1970">200</span></span></label>
-          <input id="s500" type="checkbox" name="sample" value="500"><label for="s500"><span><span id="p1980">500</span></span></label>
+          <input id="s3" type="radio" name="sample" value="3" checked="checked"><label for="s3"><span><span id="s3">3</span></span></label>
+          <input id="s10" type="radio" name="sample" value="10"><label for="s10"><span><span id="s10">10</span></span></label>
+          <input id="s100" type="radio" name="sample" value="100"><label for="s100"><span><span id="s100">100</span></span></label>
+          <input id="s200" type="radio" name="sample" value="200"><label for="s200"><span><span id="s200">200</span></span></label>
+          <input id="s500" type="radio" name="sample" value="500"><label for="s500"><span><span id="s500">500</span></span></label>
         </fieldset>
         <p>
-        <div class="filter" onclick="DoTable();">
+        <div class="filter" id="testing">
         	<i class="fa fa-search"></i>
         </div>
-        <input type="submit" value="提交" />
+        <input class="filter" id="formsubmit" type="submit" value="Test" style="width: 1028px;" />
         </p>
       </fieldset>
       </form>
@@ -84,7 +88,8 @@
             <th>时长</th>
             <th width="40%">噪音频率</th>
             <th>测试样例数</th>
-            <th>测试准确率</th>
+            <th>测试准确率1</th>
+            <th>测试准确率2</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>

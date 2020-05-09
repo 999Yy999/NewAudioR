@@ -265,18 +265,19 @@ public class AudioServiceImpl implements AudioService{
 
 	@Override
 	public double[] test(String time, int fre, int sample) {
-		// TODO Auto-generated method stub
+		int maxmusicdata=239;               //音乐库最大歌曲数
 		int success1=0, success2=0, failure1=0, failure2=0;   //记录器
 		String path="D:\\Z_毕设\\音频素材\\wav";
 		File file = new File(path);
         File[] files = file.listFiles();    //目录里的文件
-		double[] zql = null;                //两个准确率
+		double[] zql = new double[2];                //两个准确率
 		String filename = null;             //选中的样本文件名
 		// 准备sample个样本
 		Random random=new Random();
 		for (int i=0; i<sample; i++) {
+			System.out.println("-----------i:"+i);
 			//随机选择一个音频文件
-			int id=random.nextInt(sample);           //[0,9]
+			int id=random.nextInt(maxmusicdata);           //[0,9]
 			if (files!=null&&files.length > 0) {
                 filename=files[id].getName();    //我等你到三十五岁}}我等你到三十五岁}}晃儿.wav
             } 
@@ -306,56 +307,87 @@ public class AudioServiceImpl implements AudioService{
 			//search测试混合信号
 			List<HashMap<String, Object>> audios=search(filename,data);
 			// 测试结果与源文件(名称+歌手+专辑)对比
-			int flag=0;  //判断是否在top1
-			for (int k = 0; k < audios.size(); k++) {
-				int j=0;
-				//long idmusicinfo = 0;
-				String title = null,artist=null,album=null;
-				int samerate,maxrate=0;
-				Map<String, Object> map = audios.get(i);
-				Iterator iterator = map.keySet().iterator();
-				while (iterator.hasNext()) {
-					String string = (String) iterator.next();
-					System.out.println("string:"+string);
-					if (j==1){
-						artist=map.get(string).toString();
-					}
-					if (j==2){
-						album=map.get(string).toString();
-					}
-					if (j==5){
-						title=map.get(string).toString();
-						System.out.println("title:"+title);
-					}
-					if (j==4){
-						samerate=Integer.parseInt((String) map.get(string));
-						System.out.println("samerate:"+samerate);
-						//找出相似度最大的
-						if (samerate>maxrate){
-							maxrate=samerate;
-						}
-					}
-					j++;
-				}
-				if (music.getTitle()==title && music.getArtist()==artist && music.getAlbum() == album){
-					/*if (Integer.parseInt(music.getInfodir())==maxrate){
-						success1++;
-						flag=1;
-					}*/
-					/*if (flag==0){
-						failure1++;
-					}*/
+			int flag=0;  //判断是否在top3
+			System.out.println("-------------audios.size()="+audios.size());
+			if (audios.size()==1){
+				String title=(String) audios.get(0).get("title");
+				String album=(String) audios.get(0).get("album");
+				String artist=(String) audios.get(0).get("artist");
+				System.out.println("----original music: title:"+music.getTitle()+",artist:"+music.getArtist()+",album:"+music.getAlbum());
+				System.out.println("----reuslt music: title:"+title+",artist:"+artist+",album:"+album);
+				if (music.getTitle().equals(title) && music.getArtist().equals(artist) && music.getAlbum().equals(album)){
+					success1++;
 					success2++;
+					System.out.println("here1-------------success12++");
+				}else{
+					failure1++;
+					failure2++;
+					System.out.println("here2-------------failure12++");
 				}
 			}
-			
+			else{
+				int maxrate=0;
+				String maxartist = null,maxalbum = null,maxtitle = null;
+				for (int k = 0; k < audios.size(); k++) {
+					int j=0;
+					//long idmusicinfo = 0;
+					String title = null,artist=null,album=null;
+					int samerate;
+					
+					Map<String, Object> map = audios.get(k);
+					Iterator iterator = map.keySet().iterator();
+					while (iterator.hasNext()) {
+						String string = (String) iterator.next();
+						System.out.println("string:"+string);
+						if (j==1){
+							artist=map.get(string).toString();
+						}
+						if (j==2){
+							album=map.get(string).toString();
+						}
+						if (j==5){
+							title=map.get(string).toString();
+							System.out.println("title:"+title);
+						}
+						if (j==4){
+							samerate=Integer.parseInt((String) map.get(string));
+							System.out.println("samerate:"+samerate);
+							//找出相似度最大的
+							if (samerate>maxrate){
+								maxrate=samerate;
+								maxartist=artist;
+								maxalbum=album;
+								maxtitle=title;
+							}
+						}
+						j++;
+					}
+					System.out.println("---------maxrate="+maxrate);
+					System.out.println("----original music: title:"+music.getTitle()+",artist:"+music.getArtist()+",album:"+music.getAlbum());
+					System.out.println("----reuslt music: title:"+title+",artist:"+artist+",album:"+album);
+					if (flag==0 && music.getTitle().equals(title) && music.getArtist().equals(artist) && music.getAlbum().equals(album)){
+						flag=1;
+						success2++;
+						System.out.println("here3-------------success2++");
+					}
+				}
+				if (flag==0) {failure2++; System.out.println("-------------failure2++");}
+				System.out.println("-----------maxtitle:"+maxtitle+",maxartist:"+maxartist+",maxalbum:"+maxalbum);
+				if (music.getTitle().equals(maxtitle) && music.getArtist().equals(maxartist) && music.getAlbum().equals(maxalbum)){
+					System.out.println("here4-------------success1++");
+					success1++;
+				}else {failure1++; System.out.println("here5-------------failure1++");}
+			}
+			System.out.println("end-------------success1:"+success1+",success2:"+success2+",failure1:"+failure1+",failure2:"+failure2);
 		}
 			
 		
 		// 6.计数
 		// 7.计算准确率
-		zql[0]=success1/sample;
-		zql[1]=success2/sample;
+		zql[0]=success1*1.0/sample;
+		zql[1]=success2*1.0/sample;
+		System.out.println("----------zql1="+zql[0]+" = "+success1+"/"+sample);
+		System.out.println("----------zql2="+zql[1]+" = "+success2+"/"+sample);
 		
 		return zql;
 	}
