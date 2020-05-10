@@ -18,9 +18,6 @@
   <link rel="stylesheet" href="${css }/filter.css">
   <script defer src="${fonts }/js/fontawesome-all.js"></script>
   <script src="${js }/jquery.js"></script>
-  <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
-  <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-  <script src="${js }/testresult.js"></script>
   <script type="text/javascript" src="${js }/jquery-1.8.2.js"></script>
   <!-- 
   <script>
@@ -42,7 +39,7 @@
   <div id="content">
     <h1><span class="icon"><i class="fa fa-filter"></i></span> Test</h1>
     <p>
-      <form action="test" method="POST">
+      <!-- form action="test" method="POST"> -->
       <fieldset>
         <fieldset id="filter" class="ft">
           <legend>Search word</legend>
@@ -73,10 +70,10 @@
         <div class="filter" id="testing">
         	<i class="fa fa-search"></i>
         </div>
-        <input class="filter" id="formsubmit" type="submit" value="Test" style="width: 1028px;" />
+        <!-- input class="filter" id="formsubmit" type="submit" value="Test" style="width: 1028px;" /> -->
         </p>
       </fieldset>
-      </form>
+      <!-- </form> -->
     </p>
     
     <h1><span class="icon"><i class="fa fa-filter"></i></span> Results </h1>
@@ -86,15 +83,22 @@
           <tr>
             <th>编号</th>
             <th>时长</th>
-            <th width="40%">噪音频率</th>
+            <th>噪音频率</th>
             <th>测试样例数</th>
+            <th>操作</th>
             <th>测试准确率1</th>
             <th>测试准确率2</th>
+            <th>详细</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
       </table>
+      
+      <a>
+		${zqls.zql1 }  ${zqls.zql2 }
+      </a>
       </div>
   </div>
+  <script src="${js }/testresult.js"></script>
 </body>
 </html>

@@ -60,11 +60,13 @@ public class AudioController {
 	public String test(String time, int fre, int sample, Model model){
 		//完成搜索功能
 		//List<HashMap<String, Object>> audios=audioService.search(filename);
-		double[] zql=audioService.test(time, fre, sample);
-		//model.addAttribute("audios", audios);
+		//double[] zql=audioService.test(time, fre, sample);
+		HashMap<String,Object> zql=audioService.test(time, fre, sample);
+		model.addAttribute("zqls", zql);
 		System.out.println("time:"+time+",fre:"+fre+",sample:"+sample);
 		
-		return "result";
+		//return "result";
+		return "redirect:test"; 
 	}
 	
 	

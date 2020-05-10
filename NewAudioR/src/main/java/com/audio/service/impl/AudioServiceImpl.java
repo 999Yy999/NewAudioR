@@ -76,11 +76,10 @@ public class AudioServiceImpl implements AudioService{
 			e.printStackTrace();
 		}
 		int[] id = search(linkTime, linkHash, minHit);
-		/*if (id[i]<0){
-			System.out.println("--------------------------error!--id="+id);
+		if (id==null){
+			System.out.println("--------------------------时间太短 或噪声太大，未提取出指纹!--");
 			return null;
 		}
-		else{*/
 		for (int i=0; i<3; i++){
 			System.out.println("----------------------------id="+id[i]+",");
 		}
@@ -134,10 +133,15 @@ public class AudioServiceImpl implements AudioService{
 	
 	public int[] search(int[] linkTime, int[] linkHash, int minHit){
         HashMap<Integer,Integer> linkHashMap = new HashMap<>(linkHash.length);
+        System.out.println("---------fingerprint parameter length:"+linkHash.length);
         for(int i = 0; i < linkHash.length; i ++){             //client端 hash,time
+        	//System.out.println("-------linkHash["+i+"]"+"="+linkHash[i]);
             linkHashMap.put(linkHash[i],linkTime[i]);
         }
         hashMap = new HashMap<>(400000);
+        if (linkHash.length==0){
+        	return null;
+        }
         List<HashTable> audios= audioMapper.searchAllAudios(linkHash);
         for (int i=0; i<audios.size(); i++){
         	int hash = audios.get(i).getHash();
@@ -184,6 +188,7 @@ public class AudioServiceImpl implements AudioService{
 	
 	public void setHashTime(Fingerprint fp){
 		ArrayList<Fingerprint.Link> linkList =  fp.getLinkList();
+		//System.out.println("---------fingerprint length:"+linkList.size());
         linkHash = new int[linkList.size()];   //159
         linkTime = new int[linkList.size()];
         for(int i = 0; i < linkHash.length; i ++){
@@ -264,7 +269,7 @@ public class AudioServiceImpl implements AudioService{
 	}*/
 
 	@Override
-	public double[] test(String time, int fre, int sample) {
+	public HashMap<String, Object> test(String time, int fre, int sample) {
 		int maxmusicdata=239;               //音乐库最大歌曲数
 		int success1=0, success2=0, failure1=0, failure2=0;   //记录器
 		String path="D:\\Z_毕设\\音频素材\\wav";
@@ -308,6 +313,7 @@ public class AudioServiceImpl implements AudioService{
 			List<HashMap<String, Object>> audios=search(filename,data);
 			// 测试结果与源文件(名称+歌手+专辑)对比
 			int flag=0;  //判断是否在top3
+			if (audios==null) {continue;}
 			System.out.println("-------------audios.size()="+audios.size());
 			if (audios.size()==1){
 				String title=(String) audios.get(0).get("title");
@@ -336,9 +342,10 @@ public class AudioServiceImpl implements AudioService{
 					
 					Map<String, Object> map = audios.get(k);
 					Iterator iterator = map.keySet().iterator();
+					title=(String) map.get("title");
 					while (iterator.hasNext()) {
 						String string = (String) iterator.next();
-						System.out.println("string:"+string);
+						//System.out.println("string:"+string);
 						if (j==1){
 							artist=map.get(string).toString();
 						}
@@ -356,8 +363,11 @@ public class AudioServiceImpl implements AudioService{
 							if (samerate>maxrate){
 								maxrate=samerate;
 								maxartist=artist;
+								//System.out.println("-------------maxartist赋值成功："+maxartist);
 								maxalbum=album;
-								maxtitle=title;
+								//System.out.println("-------------maxartist赋值成功："+maxalbum);
+								maxtitle=title;  //上面为它赋值了，这段代码改下，不需要用迭代器，直接用属性当键取值
+								//System.out.println("-------------maxartist赋值成功："+maxtitle);
 							}
 						}
 						j++;
@@ -388,8 +398,11 @@ public class AudioServiceImpl implements AudioService{
 		zql[1]=success2*1.0/sample;
 		System.out.println("----------zql1="+zql[0]+" = "+success1+"/"+sample);
 		System.out.println("----------zql2="+zql[1]+" = "+success2+"/"+sample);
+		HashMap<String, Object> zqlmap = new HashMap<>();
+		zqlmap.put("zql1", zql[0]);
+		zqlmap.put("zql2", zql[1]);
 		
-		return zql;
+		return zqlmap;
 	}
 	
 	// 2.模拟生成fre频率的白噪声

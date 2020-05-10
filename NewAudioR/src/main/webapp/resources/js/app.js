@@ -125,7 +125,7 @@ function createDownloadLink(blob) {
 	//name of .wav file to use during upload and download (without extendion)
 	var filename = new Date().toISOString();
 
-	//add controls to the <audio> element
+	//add controls to the <audio> element这些都可以删掉
 	au.controls = true;
 	au.src = url;
 	
@@ -175,7 +175,7 @@ function createDownloadLink(blob) {
 		  xhr.open("POST","record2local",true);
 		  xhr.send(fd);
 	})*/
-	var upload = document.createElement('button');
+	/*var upload = document.createElement('button');
 	//upload.href="#";
 	upload.innerHTML = "Upload";
 	upload.addEventListener("click", function(event){
@@ -198,7 +198,7 @@ function createDownloadLink(blob) {
 	li.appendChild(upload)//add the upload link to li
 	
 	//add the li element to the ol
-	recordingsList.appendChild(li);
+	recordingsList.appendChild(li);*/
 }
 
 var num=0;
