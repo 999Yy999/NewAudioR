@@ -20,7 +20,7 @@ public class FindPeaks {
 
   public void findComplexPeaks(float[] data, int neighborRange){
       int len = data.length / 2;            //22/2=11
-      for(int i = 0 ; i < nPeaks; i++){     //[0,3) ³õÊ¼»¯
+      for(int i = 0 ; i < nPeaks; i++){     //[0,3) åˆå§‹åŒ–
           power[i] = -500;
           locate[i] = -1;
       }
@@ -32,10 +32,10 @@ public class FindPeaks {
                   + data[2 * i + 1] * data[2 * i + 1]));              //amplitude=magnitude/256
       }
 
-      for(int k = 0; k < len; k ++){        //[0,11)  ÏñÊÇ¶şÎ¬Êı×éÑ¡ÔñÅÅĞò, 11¸öµã   // ³õÉ¸×î´óÖµ£¬ºÍ×óÓÒ5¸öÁÚ¾Ó±È½Ï 
+      for(int k = 0; k < len; k ++){        //[0,11)  åƒæ˜¯äºŒç»´æ•°ç»„é€‰æ‹©æ’åº, 11ä¸ªç‚¹   // åˆç­›æœ€å¤§å€¼ï¼Œå’Œå·¦å³5ä¸ªé‚»å±…æ¯”è¾ƒ  
           float pi = data_power[k];
           boolean add = true;
-          for(int j = 0; j < neighborRange; j ++) {    //[0,5)   Óë¸½½ü5¸öµã±È½Ï
+          for(int j = 0; j < neighborRange; j ++) {    //[0,5)   ä¸é™„è¿‘5ä¸ªç‚¹æ¯”è¾ƒ
               float pl,pr;
               if(k - j >= 0) {
                   pl = data_power[k - j];
@@ -45,18 +45,18 @@ public class FindPeaks {
                   pr = data_power[k + j];
               }else pr = pi - 1;
               
-              if (pi < pl && pi < pr) {       //piÊÇ¼«Ğ¡ÖµµÄ»°,¿ÉÒÔbreakµô°É£¿
+              if (pi < pl && pi < pr) {       //piæ˜¯æå°å€¼çš„è¯,å¯ä»¥breakæ‰å§ï¼Ÿ
                   add = false;
               }
           }
-          if(add) {add(pi, k);  /*System.out.println("pi="+pi+",k="+k);*/ }//Ñ¡³ö11¸ö·åÖµµã
+          if(add) {add(pi, k);  /*System.out.println("pi="+pi+",k="+k);*/ }//é€‰å‡º11ä¸ªå³°å€¼ç‚¹
       }
   }
 
-  private void add(float p, int loc){           //ÕÒ³ö×î´óµÄÈı¸öµã Ö±½Ó²åÈëÅÅĞò£¿£¿£¿
+  private void add(float p, int loc){           //æ‰¾å‡ºæœ€å¤§çš„ä¸‰ä¸ªç‚¹ ç›´æ¥æ’å…¥æ’åºï¼Ÿï¼Ÿï¼Ÿ
       for(int i = 0; i < power.length; i++){
           if(power[i] < p){
-              for(int j = power.length - 1; j > i; j --){  //ÏñÊÇÔÚÅ²Î»ÖÃ£¬powÄÚ²¿ÊÇÅÅºÃĞòµÄ  ½µĞòÅÅÁĞ
+              for(int j = power.length - 1; j > i; j --){  //åƒæ˜¯åœ¨æŒªä½ç½®ï¼Œpowå†…éƒ¨æ˜¯æ’å¥½åºçš„  é™åºæ’åˆ—
                   power[j] = power[j-1];
                   locate[j] = locate[j-1];
               }

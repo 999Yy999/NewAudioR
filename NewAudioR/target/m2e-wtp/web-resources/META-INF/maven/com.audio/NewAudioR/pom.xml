@@ -7,12 +7,14 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>NewAudioR Maven Webapp</name>
   <url>http://maven.apache.org</url>
-  
+
   <properties>
 		<java-version>1.8</java-version>
 		<org.springframework-version>4.1.7.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.8.6</org.aspectj-version>
 		<org.slf4j-version>1.7.22</org.slf4j-version>
+		<!-- 代码在新电脑上部署新加的 -->
+		<!-- <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> -->
   </properties>
   
   <!--  If Maven can't resolve this dependency(pcmsampledsp), you might also want to add the following repository to the repositories section of your pom:-->

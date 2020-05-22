@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,10 +31,11 @@ import javax.swing.JTextField;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tritonus.sampled.convert.PCM2PCMConversionProvider;
+//import org.tritonus.sampled.convert.PCM2PCMConversionProvider;
 
 import com.audio.entity.HashTable;
 import com.audio.entity.Music;
+import com.audio.entity.PageBean;
 import com.audio.mapper.AudioMapper;
 import com.audio.service.AudioService;
 import com.audio.util.ClipAudioFile;
@@ -58,7 +61,7 @@ public class AudioServiceImpl implements AudioService{
 	long maxId = -1;
     int maxCount = -1;
     Music music=new Music();
-	//D:\Z_毕设\Others Project\Audio-Fingerprinting-master\songs\泡沫\泡沫4s.wav
+  //D:\Z_毕设\Others Project\Audio-Fingerprinting-master\songs\泡沫\泡沫4s.wav
   
 	@Override
 	public List<HashMap<String,Object>> search(String filename, float[] data1) {
@@ -77,7 +80,7 @@ public class AudioServiceImpl implements AudioService{
 		}
 		int[] id = search(linkTime, linkHash, minHit);
 		if (id==null){
-			System.out.println("--------------------------时间太短 或噪声太大，未提取出指纹!--");
+			System.out.println("--------------------------时间太短 或 噪声太大，未在数据库中找到相同指纹!--");
 			return null;
 		}
 		for (int i=0; i<3; i++){
@@ -160,7 +163,7 @@ public class AudioServiceImpl implements AudioService{
                 maxCount = integer;
             }
         });*/
-        //装的id和相似度值
+      //装的id和相似度值
         infoIds = new ArrayList<HashMap.Entry<Long, Integer>>(hashMap.entrySet());
         Collections.sort(infoIds, new Comparator<HashMap.Entry<Long, Integer>>() {   
             public int compare(HashMap.Entry<Long, Integer> o1, HashMap.Entry<Long, Integer> o2) {      
@@ -219,7 +222,7 @@ public class AudioServiceImpl implements AudioService{
         executorService.shutdown();
 		
 		//audioMapper.addMusic(music);
-		//获取最新数据，进入显示数据的页面
+      //获取最新数据，进入显示数据的页面
 		List<HashMap<String,Object>> audios= audioMapper.getAllAudios();
 		return audios;
 	}
@@ -249,7 +252,7 @@ public class AudioServiceImpl implements AudioService{
 	}
 	
 	 public static Long idHash(int id, int time){
-	        return (long) ((id << 16) + time + (1 << 15));     //左移==乘2  右移==除2
+	        return (long) ((id << 16) + time + (1 << 15));    //左移==乘2  右移==除2
 	 }
 
     public static int Hash2id(Long idHash){
@@ -269,10 +272,10 @@ public class AudioServiceImpl implements AudioService{
 	}*/
 
 	@Override
-	public HashMap<String, Object> test(String time, int fre, int sample) {
-		int maxmusicdata=239;               //音乐库最大歌曲数
-		int success1=0, success2=0, failure1=0, failure2=0;   //记录器
-		String path="D:\\Z_毕设\\音频素材\\wav";
+	public String[] test(String time, int fre, int sample) {
+		int maxmusicdata=1003;               //音乐库最大歌曲数
+		int success1=0, success2=0, failure1=0, failure2=0;    //记录器
+		String path="D:\\音乐素材\\wav";
 		File file = new File(path);
         File[] files = file.listFiles();    //目录里的文件
 		double[] zql = new double[2];                //两个准确率
@@ -292,7 +295,7 @@ public class AudioServiceImpl implements AudioService{
 			filename=path+"\\"+filename;
 			//随机确定截取音频时长
 			int mode = 0;
-			int n1 = 0,n2 = 0;    //[n1,n2]随机数   
+			int n1 = 0,n2 = 0;    //[n1,n2]随机数
 			int durtime;
 			switch (time){
 			case "mode1": mode=1; break;
@@ -363,11 +366,11 @@ public class AudioServiceImpl implements AudioService{
 							if (samerate>maxrate){
 								maxrate=samerate;
 								maxartist=artist;
-								//System.out.println("-------------maxartist赋值成功："+maxartist);
+								//System.out.println("-------------maxartist赋值成功"+maxartist);
 								maxalbum=album;
-								//System.out.println("-------------maxartist赋值成功："+maxalbum);
+								//System.out.println("-------------maxartist赋值成功"+maxalbum);
 								maxtitle=title;  //上面为它赋值了，这段代码改下，不需要用迭代器，直接用属性当键取值
-								//System.out.println("-------------maxartist赋值成功："+maxtitle);
+								//System.out.println("-------------maxartist赋值成功"+maxtitle);
 							}
 						}
 						j++;
@@ -396,13 +399,28 @@ public class AudioServiceImpl implements AudioService{
 		// 7.计算准确率
 		zql[0]=success1*1.0/sample;
 		zql[1]=success2*1.0/sample;
+		
+		DecimalFormat df = new DecimalFormat("0.0000");
+		String[] str = new String[2]; 
+		str[0] = df.format(zql[0]);
+		str[1] = df.format(zql[1]);
+		System.out.println(str[0]+","+str[1]);
+		
+		
+		/*BigDecimal bg1 = new BigDecimal(zql[0]);
+		zql[0] = bg1.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+		BigDecimal bg2 = new BigDecimal(zql[1]);
+		zql[1] = bg2.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();*/
+		
 		System.out.println("----------zql1="+zql[0]+" = "+success1+"/"+sample);
 		System.out.println("----------zql2="+zql[1]+" = "+success2+"/"+sample);
-		HashMap<String, Object> zqlmap = new HashMap<>();
-		zqlmap.put("zql1", zql[0]);
-		zqlmap.put("zql2", zql[1]);
 		
-		return zqlmap;
+		return str;
+		//HashMap<String, Object> zqlmap = new HashMap<>();
+		//zqlmap.put("zql1", zql[0]);
+		//zqlmap.put("zql2", zql[1]);
+		
+		//return zqlmap;
 	}
 	
 	// 2.模拟生成fre频率的白噪声
@@ -486,6 +504,35 @@ public class AudioServiceImpl implements AudioService{
 	public void startrecord() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PageBean<HashMap<String, Object>> listMusicByPage(int pc, int ps) {
+		//获取表格的总的记录数， 用于计算共多少页计算的方法（算法）在实体类PageBean中
+		int count = audioMapper.getTotalCount();
+		System.out.println("cnt="+count);
+		//创建分页实体，封装相关的数据
+		PageBean<HashMap<String,Object>> pb = new PageBean<HashMap<String,Object>>();
+		pb.setPc(pc);//当前页数 比如 第一页 为 1,第二页 为 2 
+		pb.setPs(ps);//每页记录数 比如每页显示 5 行
+		pb.setTr(count);//总记录数  比如  总共有为10 行
+		//获取带条件的查询的当前页的数据
+		List<HashMap<String,Object>> users = audioMapper.getMusicByPage(pc,ps);
+		//将查询的数据封装到分页实体类
+		pb.setBeanList(users);
+		
+		return pb;
+	}
+
+	@Override
+	public List<HashMap<String, Object>> deleteMusicById(Integer id) {
+		// 删除音乐表中记录
+		audioMapper.deleteAudio1(id);
+		//删除指纹表中记录
+		audioMapper.deleteAudio2(id);
+		//返回最新数据
+		List<HashMap<String, Object>> audios = audioMapper.getAllAudios();
+		return audios;
 	}
 }
 

@@ -36,39 +36,39 @@ public class ReadAudioFile {
     public float[] readFile(File file) throws Exception{
         AudioInputStream stream;
         try {
-            stream = AudioSystem.getAudioInputStream(file);  // ´ÓÌá¹©µÄ File »ñµÃÒôÆµÊäÈëÁ÷
+            stream = AudioSystem.getAudioInputStream(file);  // ä»æä¾›çš„ File è·å¾—éŸ³é¢‘è¾“å…¥æµ
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
-        AudioFormat format = stream.getFormat();        // »ñµÃ ´ËÒôÆµÊäÈëÁ÷ÖĞÉùÒôÊı¾İµÄ  ÒôÆµ¸ñÊ½
+        AudioFormat format = stream.getFormat();        // è·å¾— æ­¤éŸ³é¢‘è¾“å…¥æµä¸­å£°éŸ³æ•°æ®çš„  éŸ³é¢‘æ ¼å¼
 
         if(format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED){
             throw new Exception("Encoding must be PCM_SIGNED!");
         }
-        if(format.getSampleRate() != 8000){         // »ñÈ¡Ñù±¾ËÙÂÊ,¼´Ã¿ÃëÑù±¾Êı
+        if(format.getSampleRate() != 8000){         // è·å–æ ·æœ¬é€Ÿç‡,å³æ¯ç§’æ ·æœ¬æ•°
             throw new Exception("SampleRate must be 8000!");
         }
         
-        int len = (int) stream.getFrameLength();   // »ñµÃÁ÷µÄ³¤¶È£¬ÒÔÊ¾ÀıÖ¡Îªµ¥Î»  sample_rate: Ò»Ãë²ÉÑù8000¸öÖ¡
-        System.out.println("len="+len+",available="+stream.available());   //len/sample_rate = Ê±³¤£¨µ¥Î»£ºÃë£©
+        int len = (int) stream.getFrameLength();   // è·å¾—æµçš„é•¿åº¦ï¼Œä»¥ç¤ºä¾‹å¸§ä¸ºå•ä½  sample_rate: ä¸€ç§’é‡‡æ ·8000ä¸ªå¸§Ö¡
+        System.out.println("len="+len+",available="+stream.available());    //len/sample_rate = æ—¶é•¿ï¼ˆå•ä½ï¼šç§’ï¼‰
          
-        float[] dataL = new float[len];    // ×óÓÒÉùµÀÊı¾İ
+        float[] dataL = new float[len];     // å·¦å³å£°é“æ•°æ®
         float[] dataR = new float[len];
 
         
-        ByteBuffer buf = ByteBuffer.allocate(4 * len);   // ×Ö½Ú»º³å  4*len???    floatµÈÓÚ4byte£¿£¿£¿      ans:Ò»Ö¡=4×Ö½Ú
+        ByteBuffer buf = ByteBuffer.allocate(4 * len);  // å­—èŠ‚ç¼“å†²  4*len???    floatç­‰äº4byteï¼Ÿï¼Ÿï¼Ÿ      ans:ä¸€å¸§=4å­—èŠ‚
         byte[] bytes = new byte[4 * len];
         try {
             //noinspection ResultOfMethodCallIgnored
-            stream.read(bytes);                        // ¶ÁÈ¡Ò»¶¨ÊıÁ¿µÄ×Ö½Ú,½«Æä´æ´¢ÔÚ bytesÖĞ
-            buf.put(bytes);           // ½«¸ø¶¨µÄÔ´ bytesÊı×éµÄËùÓĞÄÚÈİ´«Êäµ½»º³åÇøbufÖĞ
-            buf.rewind();             // µ¹´ø»º³åÇø£¨»Øµ½¿ªÊ¼Î»ÖÃ£¿
+            stream.read(bytes);                        // è¯»å–ä¸€å®šæ•°é‡çš„å­—èŠ‚,å°†å…¶å­˜å‚¨åœ¨ bytesä¸­
+            buf.put(bytes);           // å°†ç»™å®šçš„æº bytesæ•°ç»„çš„æ‰€æœ‰å†…å®¹ä¼ è¾“åˆ°ç¼“å†²åŒºbufä¸­
+            buf.rewind();             // å€’å¸¦ç¼“å†²åŒºï¼ˆå›åˆ°å¼€å§‹ä½ç½®ï¼Ÿ
             
             for(int i = 0; i < len; i++){
-            	buf.order(ByteOrder.LITTLE_ENDIAN);      // ĞŞ¸Ä×Ö½ÚË³Ğò,little_endian Ğ¡¶Ë£¨¶à×Ö½ÚÖµµÄ×Ö½ÚË³ĞòÊÇ´Ó×îµÍÓĞĞ§Î»µ½×î¸ßµÄ£©
-                dataL[i] = buf.getShort() / 32768f;      // short --> float // ¶ÁÈ¡bufµ±Ç°Î»ÖÃ(¿ªÊ¼Î»ÖÃ)Ö®ºóµÄÁ½¸ö×Ö½Ú£¬¸ù¾İµ±Ç°µÄ×Ö½ÚË³Ğò½«ËüÃÇ×é³É shortÖµ£¬È»ºó½«¸ÃÎ»ÖÃÔö¼Ó 2¡£
-                dataR[i] = buf.getShort() / 32768f;      // 32768£ºshortµÄÈ¡Öµ·¶Î§
+            	buf.order(ByteOrder.LITTLE_ENDIAN);      // ä¿®æ”¹å­—èŠ‚é¡ºåº,little_endian å°ç«¯ï¼ˆå¤šå­—èŠ‚å€¼çš„å­—èŠ‚é¡ºåºæ˜¯ä»æœ€ä½æœ‰æ•ˆä½åˆ°æœ€é«˜çš„ï¼‰
+                dataL[i] = buf.getShort() / 32768f;      // short --> float// è¯»å–bufå½“å‰ä½ç½®(å¼€å§‹ä½ç½®)ä¹‹åçš„ä¸¤ä¸ªå­—èŠ‚ï¼Œæ ¹æ®å½“å‰çš„å­—èŠ‚é¡ºåºå°†å®ƒä»¬ç»„æˆ shortå€¼ï¼Œç„¶åå°†è¯¥ä½ç½®å¢åŠ  2ã€‚
+                dataR[i] = buf.getShort() / 32768f;      // 32768 shortçš„å–å€¼èŒƒå›´
             }
             
         } catch (IOException e) {
@@ -78,7 +78,7 @@ public class ReadAudioFile {
         
         float[] data = new float[len];
         for(int i = 0; i < len; i++){ 
-            data[i] = dataL[i] + dataR[i];      // // ¸µÀïÒ¶±ä»»±ØĞë½öÔÚÒ»¸öÍ¨µÀÉÏÓ¦ÓÃ,È¡¾ùÖµ, stereo -> mono
+            data[i] = dataL[i] + dataR[i];      // // å‚…é‡Œå¶å˜æ¢å¿…é¡»ä»…åœ¨ä¸€ä¸ªé€šé“ä¸Šåº”ç”¨,å–å‡å€¼, stereo -> mono
             data[i] /= 2;
         }
         

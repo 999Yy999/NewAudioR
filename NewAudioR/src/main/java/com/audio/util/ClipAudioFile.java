@@ -10,38 +10,45 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 public class ClipAudioFile {
+	ReadAudioFile readAudioFile=new ReadAudioFile();
 	public float[] clipFile(String filename, int durtime, int pos, int fre) throws Exception{
 		int fs=8000;
 		AudioInputStream stream;
 		AudioInputStream nstream;
-		String nfilename="D:\\Z_±ÏÉè\\ÒôÆµËØ²Ä\\whitenoise\\"+"white"+fre+".wav";
+	
 		File file=new File(filename);
+		if (fre==0){
+			float data[] = readAudioFile.readFile(file);
+			return data;
+		}
+		String nfilename="D:\\éŸ³ä¹ç´ æ\\whitenoise\\"+"white"+fre+".wav";
+		
 		File nfile=new File(nfilename);
 		
         try {
-            stream = AudioSystem.getAudioInputStream(file);  // ´ÓÌá¹©µÄ File »ñµÃÒôÆµÊäÈëÁ÷
+            stream = AudioSystem.getAudioInputStream(file);  // ä»æä¾›çš„ File è·å¾—éŸ³é¢‘è¾“å…¥æµ
             nstream = AudioSystem.getAudioInputStream(nfile);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
-        AudioFormat format = stream.getFormat();        // »ñµÃ ´ËÒôÆµÊäÈëÁ÷ÖĞÉùÒôÊı¾İµÄ  ÒôÆµ¸ñÊ½
+        AudioFormat format = stream.getFormat();         // è·å¾— æ­¤éŸ³é¢‘è¾“å…¥æµä¸­å£°éŸ³æ•°æ®çš„  éŸ³é¢‘æ ¼å¼
         AudioFormat nformat = nstream.getFormat();
         
         if(format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED){
             throw new Exception("Encoding must be PCM_SIGNED!");
         }
-        if(format.getSampleRate() != 8000){         // »ñÈ¡Ñù±¾ËÙÂÊ,¼´Ã¿ÃëÑù±¾Êı
+        if(format.getSampleRate() != 8000){          // è·å–æ ·æœ¬é€Ÿç‡,å³æ¯ç§’æ ·æœ¬æ•°
             throw new Exception("SampleRate must be 8000!");
         }
         if(nformat.getEncoding() != AudioFormat.Encoding.PCM_SIGNED){
             throw new Exception("nEncoding must be PCM_SIGNED!");
         }
-        if(nformat.getSampleRate() != 8000){         // »ñÈ¡Ñù±¾ËÙÂÊ,¼´Ã¿ÃëÑù±¾Êı
+        if(nformat.getSampleRate() != 8000){         // è·å–æ ·æœ¬é€Ÿç‡,å³æ¯ç§’æ ·æœ¬æ•°
             throw new Exception("nSampleRate must be 8000!");
         }
         
-        int len = (int) stream.getFrameLength();   // »ñµÃÁ÷µÄ³¤¶È£¬ÒÔÊ¾ÀıÖ¡Îªµ¥Î»  sample_rate: Ò»Ãë²ÉÑù8000¸öÖ¡
+        int len = (int) stream.getFrameLength();    // è·å¾—æµçš„é•¿åº¦ï¼Œä»¥ç¤ºä¾‹å¸§ä¸ºå•ä½  sample_rate: ä¸€ç§’é‡‡æ ·8000ä¸ªå¸§Ö¡
         int nlen= (int) nstream.getFrameLength();
         int[] clippos=new int[6];
         clippos[1]=0+fs; clippos[5]=len-fs*20; 
@@ -49,22 +56,22 @@ public class ClipAudioFile {
         clippos[4]=(clippos[3]+clippos[5])/2;
         System.out.println("--------pos:"+pos+",pos1:"+ clippos[1]+",pos2:"+clippos[2]+",pos3:"+clippos[3]+",pos4:"+clippos[4]+",pos5:"+clippos[5]);
         
-        System.out.println("sample:len="+len+",available="+stream.available());   //len/sample_rate = Ê±³¤£¨µ¥Î»£ºÃë£©
+        System.out.println("sample:len="+len+",available="+stream.available());   //len/sample_rate = æ—¶é•¿ï¼ˆå•ä½ï¼šç§’ï¼‰
         System.out.println("noise:len="+nlen+",available="+nstream.available());
         
-        float[] dataL = new float[durtime*fs];    // ×óÓÒÉùµÀÊı¾İ
+        float[] dataL = new float[durtime*fs];    // å·¦å³å£°é“æ•°æ®
         float[] dataR = new float[durtime*fs];
         
-        float[] ndataL = new float[durtime*fs];    // ×óÓÒÉùµÀÊı¾İ
+        float[] ndataL = new float[durtime*fs];    
         float[] ndataR = new float[durtime*fs];
         
-        ByteBuffer buf = ByteBuffer.allocate(4 * durtime*fs);   // ×Ö½Ú»º³å  4*len???    floatµÈÓÚ4byte£¿£¿£¿      ans:Ò»Ö¡=4×Ö½Ú
+        ByteBuffer buf = ByteBuffer.allocate(4 * durtime*fs);   // å­—èŠ‚ç¼“å†²  4*len???    floatç­‰äº4byteï¼Ÿï¼Ÿï¼Ÿ      ans:ä¸€å¸§=4å­—èŠ‚
         byte[] bytes = new byte[4 * durtime*fs];
         try {
             //noinspection ResultOfMethodCallIgnored
-            stream.read(bytes);                        // ¶ÁÈ¡Ò»¶¨ÊıÁ¿µÄ×Ö½Ú,½«Æä´æ´¢ÔÚ bytesÖĞ
-            buf.put(bytes);           // ½«¸ø¶¨µÄÔ´ bytesÊı×éµÄËùÓĞÄÚÈİ´«Êäµ½»º³åÇøbufÖĞ
-            buf.rewind();             // µ¹´ø»º³åÇø£¨»Øµ½¿ªÊ¼Î»ÖÃ£¿
+            stream.read(bytes);                        // è¯»å–ä¸€å®šæ•°é‡çš„å­—èŠ‚,å°†å…¶å­˜å‚¨åœ¨ bytesä¸­
+            buf.put(bytes);           // å°†ç»™å®šçš„æº bytesæ•°ç»„çš„æ‰€æœ‰å†…å®¹ä¼ è¾“åˆ°ç¼“å†²åŒºbufä¸­
+            buf.rewind();              // å€’å¸¦ç¼“å†²åŒºï¼ˆå›åˆ°å¼€å§‹ä½ç½®ï¼Ÿ
             System.out.println("--------start:"+clippos[pos]+",end:"+(clippos[pos]+durtime*fs));
             
             int j=0;
@@ -82,18 +89,18 @@ public class ClipAudioFile {
             return null;
         }
         
-        ByteBuffer buf1 = ByteBuffer.allocate(4 * durtime*fs);   // ×Ö½Ú»º³å  4*len???    floatµÈÓÚ4byte£¿£¿£¿      ans:Ò»Ö¡=4×Ö½Ú
+        ByteBuffer buf1 = ByteBuffer.allocate(4 * durtime*fs); 
         byte[] bytes1 = new byte[4 * durtime*fs];
         try {
             //noinspection ResultOfMethodCallIgnored
-            nstream.read(bytes1);                        // ¶ÁÈ¡Ò»¶¨ÊıÁ¿µÄ×Ö½Ú,½«Æä´æ´¢ÔÚ bytesÖĞ
-            buf1.put(bytes1);          // ½«¸ø¶¨µÄÔ´ bytesÊı×éµÄËùÓĞÄÚÈİ´«Êäµ½»º³åÇøbufÖĞ
-            buf1.rewind();             // µ¹´ø»º³åÇø£¨»Øµ½¿ªÊ¼Î»ÖÃ£¿
+            nstream.read(bytes1);                        
+            buf1.put(bytes1);          
+            buf1.rewind();             
             int j=0;
             for(int i = clippos[pos]; i < clippos[pos]+durtime*fs; i++){
-            	buf1.order(ByteOrder.LITTLE_ENDIAN);      // ĞŞ¸Ä×Ö½ÚË³Ğò,little_endian Ğ¡¶Ë£¨¶à×Ö½ÚÖµµÄ×Ö½ÚË³ĞòÊÇ´Ó×îµÍÓĞĞ§Î»µ½×î¸ßµÄ£©
-                ndataL[j] = buf1.getShort() / 32768f;      // short --> float // ¶ÁÈ¡bufµ±Ç°Î»ÖÃ(¿ªÊ¼Î»ÖÃ)Ö®ºóµÄÁ½¸ö×Ö½Ú£¬¸ù¾İµ±Ç°µÄ×Ö½ÚË³Ğò½«ËüÃÇ×é³É shortÖµ£¬È»ºó½«¸ÃÎ»ÖÃÔö¼Ó 2¡£
-                ndataR[j] = buf1.getShort() / 32768f;      // 32768£ºshortµÄÈ¡Öµ·¶Î§
+            	buf1.order(ByteOrder.LITTLE_ENDIAN);      // ä¿®æ”¹å­—èŠ‚é¡ºåº,little_endian å°ç«¯ï¼ˆå¤šå­—èŠ‚å€¼çš„å­—èŠ‚é¡ºåºæ˜¯ä»æœ€ä½æœ‰æ•ˆä½åˆ°æœ€é«˜çš„ï¼‰
+                ndataL[j] = buf1.getShort() / 32768f;     // short --> float // è¯»å–bufå½“å‰ä½ç½®(å¼€å§‹ä½ç½®)ä¹‹åçš„ä¸¤ä¸ªå­—èŠ‚ï¼Œæ ¹æ®å½“å‰çš„å­—èŠ‚é¡ºåºå°†å®ƒä»¬ç»„æˆ shortå€¼ï¼Œç„¶åå°†è¯¥ä½ç½®å¢åŠ  2ã€‚
+                ndataR[j] = buf1.getShort() / 32768f;     // 32768ï¼šshortçš„å–å€¼èŒƒå›´
                 j++;
             }
             
@@ -104,7 +111,7 @@ public class ClipAudioFile {
         int k=0;
         float[] data = new float[durtime*fs];
         for(int i = 0; i < dataL.length; i++){ 
-            dataL[i] = dataL[i] + ndataL[i];      // // ¸µÀïÒ¶±ä»»±ØĞë½öÔÚÒ»¸öÍ¨µÀÉÏÓ¦ÓÃ,È¡¾ùÖµ, stereo -> mono
+            dataL[i] = dataL[i] + ndataL[i];      // // å‚…é‡Œå¶å˜æ¢å¿…é¡»ä»…åœ¨ä¸€ä¸ªé€šé“ä¸Šåº”ç”¨,å–å‡å€¼, stereo -> mono
             dataR[i] = dataR[i] + ndataR[i];   
         }
         for(int i = 0; i < dataL.length; i++){ 

@@ -57,7 +57,7 @@
         <thead>
           <tr>
             <th>录音编号</th>
-            <th width="40%">时长</th>
+            <th>时长</th>
             <th>播放</th>
             <th>搜索</th>
           </tr>

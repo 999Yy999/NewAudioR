@@ -15,37 +15,37 @@ public class Spectrogram {
         super();
         int dataLen = data.length;
         int stepSize = windowSize - overlap;   //hopsize
-        stft = new ArrayList<>();              //ÆµÂÊÊÇÒòÎª ´°¿Ú´óĞ¡512£¬stftÖĞµÄÊı×é³¤¶ÈÎª512£¬  //Á½¸öÊı¾İ¼´Êµ²¿Ğé²¿×é³ÉÒ»¸öÕûÌå Ëã³öpower[256], ÆµÂÊÒ²ÊÇÁ½¸öÒ»¸öÕûÌåfreq[256] 
-        freq = new float[windowSize / 2];      // ¸ù¾İÄÎ¿üË¹ÌØ²ÉÑùÆµÂÊ,fft´°¿Ú´óĞ¡N£º512, ÆµÂÊµÄ¿ÉÄÜ·¶Î§ÊÇËüµÄÒ»°ë£¬ºóÒ»°ëÆµÂÊÊÇ²»×¼È·
+        stft = new ArrayList<>();              //é¢‘ç‡æ˜¯å› ä¸º çª—å£å¤§å°512ï¼Œstftä¸­çš„æ•°ç»„é•¿åº¦ä¸º512ï¼Œ  //ä¸¤ä¸ªæ•°æ®å³å®éƒ¨è™šéƒ¨ç»„æˆä¸€ä¸ªæ•´ä½“ ç®—å‡ºpower[256], é¢‘ç‡ä¹Ÿæ˜¯ä¸¤ä¸ªä¸€ä¸ªæ•´ä½“freq[256]
+        freq = new float[windowSize / 2];      // æ ¹æ®å¥ˆå¥æ–¯ç‰¹é‡‡æ ·é¢‘ç‡,fftçª—å£å¤§å°Nï¼š512, é¢‘ç‡çš„å¯èƒ½èŒƒå›´æ˜¯å®ƒçš„ä¸€åŠï¼Œåä¸€åŠé¢‘ç‡æ˜¯ä¸å‡†ç¡®
         time = new float[dataLen / stepSize];  // 
         fft = new FloatFFT_1D(windowSize);     //* n=512
         fftData = new float[windowSize * 2];
 
-        Window window = new Window(windowsType, windowSize);       //ÉèÖÃHANN´°¿Úº¯ÊıµÄÖµ
+        Window window = new Window(windowsType, windowSize);       //è®¾ç½®HANNçª—å£å‡½æ•°çš„å€¼Öµ
 
-        for(int i = 0; i < dataLen; ) {                // ÎªÃ¿Ò»¸ö»¬¶¯´°¿Ú½øĞĞ¼Ó´°¡¢²¹Áã¡¢¼ÆËãFFT¡¢·ÅÈëstft
-            if(i + windowSize > data.length){          // ´¦Àí×îºóµÄÒ»¸ö´°¿Ú£¬80000/256=312...128
+        for(int i = 0; i < dataLen; ) {                // ä¸ºæ¯ä¸€ä¸ªæ»‘åŠ¨çª—å£è¿›è¡ŒåŠ çª—ã€è¡¥é›¶ã€è®¡ç®—FFTã€æ”¾å…¥stft
+            if(i + windowSize > data.length){          // å¤„ç†æœ€åçš„ä¸€ä¸ªçª—å£ï¼Œ80000/256=312...128
                 break;
             }
             float[] win;
             try {
-                win = window.window(data, i);          //ÒÑ¼Ó´°
+                win = window.window(data, i);          //å·²åŠ çª—
             } catch (Exception e) {
                 e.printStackTrace();
                 return;
             }
             //calc fft
-            calcFFT(win);   //²¹Áã+FFT(½á¹û´æÔÚfftDataÖĞ)
+            calcFFT(win);   //è¡¥é›¶+FFT(ç»“æœå­˜åœ¨fftDataä¸­)
             //add
-            addSTFT();      //¼ÆËãSTFT
+            addSTFT();      //è®¡ç®—STFT
             i += stepSize;
         }
-        calcFreq(fs);     //¼ÆËãÆµÂÊ
-        calcTime(fs, stepSize);  //¼ÆËãÊ±¼ä£¨Ö¡£¿£©
+        calcFreq(fs);     //è®¡ç®—é¢‘ç‡
+        calcTime(fs, stepSize);  //è®¡ç®—æ—¶é—´ï¼ˆå¸§ï¼Ÿï¼‰
     }
 
     private void calcFFT(float[] win){
-        for(int i = 0; i < win.length ; i ++){       //²¹Áã
+        for(int i = 0; i < win.length ; i ++){      //è¡¥é›¶
             fftData[i * 2] = win[i];
             fftData[i * 2 + 1] = 0;
         }

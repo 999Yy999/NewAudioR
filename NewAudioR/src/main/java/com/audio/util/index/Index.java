@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Index {                    //client.javaÃ»ÓÐÓÃµ½Index           //not used
+public class Index {                    //client.javaæ²¡æœ‰ç”¨åˆ°Index           //not used
     private final HashMap<Long,Integer> hashMap;
     //private MysqlDB sqlDB;
     public Index() {
@@ -39,25 +39,25 @@ public class Index {                    //client.javaÃ»ÓÐÓÃµ½Index           //n
     @SuppressWarnings("WeakerAccess")
     public int search(int[] linkTime, int[] linkHash, int minHit){
         HashMap<Integer,Integer> linkHashMap = new HashMap<>(linkHash.length);
-        for(int i = 0; i < linkHash.length; i ++){     //client¶Ë hash,time
+        for(int i = 0; i < linkHash.length; i ++){     //clientç«¯ hash,time
             linkHashMap.put(linkHash[i],linkTime[i]);
         }
 
-        /*ResultSet rs = sqlDB.searchAll(linkHash);    //Óë159¸öhashÖµÏàÍ¬µÄ½á¹û¼¯ :1655¸öÖ¸ÎÆ 
+        /*ResultSet rs = sqlDB.searchAll(linkHash);   //ä¸Ž159ä¸ªhashå€¼ç›¸åŒçš„ç»“æžœé›† :1655ä¸ªæŒ‡çº¹ 
 
         try {
-            while(rs.next()){                //server¶Ë
+            while(rs.next()){                 //serverç«¯
                 int hash = rs.getInt(2);
                 int id = rs.getInt(3);
-                int time = rs.getInt(4);     //ÃªµãµÄt1
+                int time = rs.getInt(4);     //é”šç‚¹çš„t1
                 
                 //Hits hits = new Hits(id, linkHashMap.get(hash) - time);
                 Integer count;
                 //if(hashMap.containsKey(hits))
-                Long idHash = idHash(id,linkHashMap.get(hash) - time); //Ê±¼ä²îsample time-database time
+                Long idHash = idHash(id,linkHashMap.get(hash) - time); //æ—¶é—´å·®sample time-database time
                 count = hashMap.get(idHash);
                 if(count == null) count = 0;
-                hashMap.put(idHash,count + 1);  //idhashÒÑ´æÔÚ£¬Ôòvalue¸üÐÂ, Í³¼ÆÊ±¼ä²î£¬cntÔ½´óÏàËÆ¶ÈÔ½¸ß
+                hashMap.put(idHash,count + 1);  //idhashå·²å­˜åœ¨ï¼Œåˆ™valueæ›´æ–°, ç»Ÿè®¡æ—¶é—´å·®ï¼Œcntè¶Šå¤§ç›¸ä¼¼åº¦è¶Šé«˜
             }
             rs.close();
         } catch (SQLException e) {
@@ -76,7 +76,7 @@ public class Index {                    //client.javaÃ»ÓÐÓÃµ½Index           //n
     }
 
     public static Long idHash(int id, int time){
-        return (long) ((id << 16) + time + (1 << 15));     //×óÒÆ==³Ë2  ÓÒÒÆ==³ý2
+        return (long) ((id << 16) + time + (1 << 15));     //å·¦ç§»==ä¹˜2  å³ç§»==é™¤2
     }
 
     public static int Hash2id(Long idHash){

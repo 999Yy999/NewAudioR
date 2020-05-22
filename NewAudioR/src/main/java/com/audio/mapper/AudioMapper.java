@@ -17,6 +17,10 @@ public interface AudioMapper {
 	public int addHash(HashTable hashtable);
 	public List<HashMap<String,Object>> getAudiosByIDs(int[] id);
 	public List<HashTable> searchAllAudios(int[] linkHash);
+	public int getTotalCount();
+	public List<HashMap<String, Object>> getMusicByPage(@Param("pc") int pc, @Param("ps") int ps);
+	public void deleteAudio1(Integer id);
+	public void deleteAudio2(Integer id);
 	
 	//public List<HashTable> searchAllAudios(Map linkHash);
 }

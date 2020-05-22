@@ -25,85 +25,138 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.audio.entity.Music;
+import com.audio.entity.PageBean;
 import com.audio.service.AudioService;
 
 @Controller
 public class AudioController {
 	@Autowired
 	private AudioService audioService;
-	//Ìø×ªµ½Ä¬ÈÏ½çÃæ
+	//è·³è½¬åˆ°é»˜è®¤ç•Œé¢
 	@RequestMapping(value="/index", method=RequestMethod.GET)
 	public String index(){
 		return "index";
 	}
 	
-	//Ìø×ªµ½ĞÂ½çÃæ
-	@RequestMapping(value="/main", method=RequestMethod.GET)
-	public String main(){
-		return "main";
+	//ç®¡ç†å‘˜æ·»åŠ éŸ³ä¹
+	@RequestMapping(value="/admin", method=RequestMethod.GET)
+	public String admin(){
+		return "admin";
 	}
 	
-	//Ìø×ªµ½ĞÂ½çÃæ
-	@RequestMapping(value="/searchpage", method=RequestMethod.GET)
-	public String searchpage(){
-		return "searchpage";
-	}
+	//è·³è½¬åˆ°æ˜¾ç¤ºéŸ³ä¹åº“ç•Œé¢
+	/*@RequestMapping(value="/showmusics", method=RequestMethod.GET)
+	public String showmusics(){
+		return "showmusics";
+	}*/
 	
-	//Ìø×ªµ½ĞÂ½çÃæ
-	@RequestMapping(value="/test", method=RequestMethod.GET)
-	public String testpage(){
-		return "test";
-	}
-		
-	//²âÊÔ
-	@RequestMapping(value="/test", method=RequestMethod.POST)
-	public String test(String time, int fre, int sample, Model model){
-		//Íê³ÉËÑË÷¹¦ÄÜ
-		//List<HashMap<String, Object>> audios=audioService.search(filename);
-		//double[] zql=audioService.test(time, fre, sample);
-		HashMap<String,Object> zql=audioService.test(time, fre, sample);
-		model.addAttribute("zqls", zql);
-		System.out.println("time:"+time+",fre:"+fre+",sample:"+sample);
-		
-		//return "result";
-		return "redirect:test"; 
-	}
+	//æ˜¾ç¤ºéŸ³ä¹åº“éŸ³ä¹åŠŸèƒ½
 	
-	
-	//ÏÔÊ¾ÒôÀÖÁĞ±í
+	//@RequestMapping(value="/showmusics", method=RequestMethod.GET)
 	@RequestMapping(value="/listmusic", method=RequestMethod.GET)
+	public String showmusics(@RequestParam(defaultValue="1") int pc,Model model){
+	//public String showmusics(Model model){
+		List<HashMap<String,Object>> musics = audioService.listAll();
+		model.addAttribute("musics", musics);
+		
+		// ç»™å®špsçš„å€¼ï¼Œæ¯é¡µæ˜¾ç¤ºçš„è¡Œæ•°,é»˜è®¤å€¼PageBeanç»™çš„æ˜¯æ¯é¡µæ˜¾ç¤º10æ¡
+		int ps = 30;
+		//å°†æŸ¥è¯¢çš„æ•°æ®å°è£…åˆ°åˆ†é¡µæ§ä»¶ pc tr  ps beanList
+		PageBean<HashMap<String,Object>> pb = audioService.listMusicByPage(pc,ps);
+		model.addAttribute("pb", pb);
+		
+		return "listmusic";
+		//return "showmusics";
+	}
+	
+	//æ˜¾ç¤ºéŸ³ä¹åˆ—è¡¨
+	/*@RequestMapping(value="/listmusic", method=RequestMethod.GET)
 	public String listmusic(Model model){
 		List<HashMap<String,Object>> audios = audioService.listAll();
 		model.addAttribute("audios", audios);
 		
 		return "listmusic";
+	}*/
+	
+	//è·³è½¬åˆ°æ–°ç•Œé¢
+	@RequestMapping(value="/main", method=RequestMethod.GET)
+	public String main(){
+		return "main";
 	}
 	
-	//²åÈëµ½ÒôÀÖ¿â
+	//è·³è½¬åˆ°æ–°ç•Œé¢
+	@RequestMapping(value="/searchpage", method=RequestMethod.GET)
+	public String searchpage(){
+		return "searchpage";
+	}
+	
+	//è·³è½¬åˆ°æ–°ç•Œé¢
+	@RequestMapping(value="/testpage", method=RequestMethod.GET)
+	public String testpage(){
+		//System.out.println("--------zqls:"+zqls);
+		//System.out.println("testget, zql1:"+zqls.get("zql1")+"zql2:"+zqls.get("zql2"));
+		//System.out.println("testget, zql1:"+zqls[0]+"zql2:"+zqls[1]);
+		return "test";
+	}
+	
+	@RequestMapping(value="/test", method=RequestMethod.GET)
+	public String test(String[] zqls, Model model){
+		System.out.println("--------zqls:"+zqls);
+		//System.out.println("testget, zql1:"+zqls.get("zql1")+"zql2:"+zqls.get("zql2"));
+		System.out.println("testget, zql1:"+zqls[0]+"zql2:"+zqls[1]);
+		model.addAttribute("zqls", zqls);
+		return "test";
+	}
+		
+	//æµ‹è¯•
+	@RequestMapping(value="/test", method=RequestMethod.POST)
+	public String test(String time, int fre, int sample, Model model){
+		//å®Œæˆæœç´¢åŠŸèƒ½
+		//List<HashMap<String, Object>> audios=audioService.search(filename);
+		//double[] zql=audioService.test(time, fre, sample);
+		String[] zqls=audioService.test(time, fre, sample);
+		System.out.println("testpost, zql1:"+zqls[0]+"zql2:"+zqls[1]);
+		model.addAttribute("zqls", zqls);
+		
+		//return "test";
+		return "redirect:test"; 
+	}
+	
+	//deleteAudio
+	@RequestMapping(value="/deleteMusicByID", method=RequestMethod.GET)
+	public String deleteMusicByID(Integer id, Model model){
+		List<HashMap<String,Object>> audios = audioService.deleteMusicById(id);
+		model.addAttribute("audios", audios);
+		
+		//æ·»åŠ æˆåŠŸåæ‰§è¡Œlistmusicæ–¹æ³•è·å–æœ€æ–°æ•°æ®è·³è½¬è‡³listmusicç•Œé¢
+		return "redirect:listmusic";
+	}
+	
+	//æ’å…¥åˆ°éŸ³ä¹åº“
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public String insert(String filedir, Model model){
-		//Íê³ÉÌí¼Ó¹¦ÄÜ
+		//å®Œæˆæ·»åŠ åŠŸèƒ½
 		List<HashMap<String,Object>> audios=audioService.insert(filedir);
-		//Êı¾İ·µ»ØÇ°¶Ë
+		//æ•°æ®è¿”å›å‰ç«¯
 		model.addAttribute("audios", audios);
-		//Ìø×ªÒ³Ãæi
+		//è·³è½¬é¡µé¢i
 		return "listmusic";
 	}
 	
-	//¼ìË÷Ñù±¾ÒôÀÖ
+	//æ£€ç´¢æ ·æœ¬éŸ³ä¹
 	@RequestMapping(value="/search", method=RequestMethod.POST)
 	public String search(String filename, Model model){
-		//Íê³ÉËÑË÷¹¦ÄÜ
+		//å®Œæˆæœç´¢åŠŸèƒ½
 		List<HashMap<String, Object>> audios=audioService.search(filename,null);
 		model.addAttribute("audios", audios);
 		
 		return "result";
 	}
 	
-	//¼ìË÷Ñù±¾ÒôÀÖ Ö§³ÖÖØ¶¨Ïò
+	//æ£€ç´¢æ ·æœ¬éŸ³ä¹ æ”¯æŒé‡å®šå‘
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public String searchr(String filename, Model model){
-		//Íê³ÉËÑË÷¹¦ÄÜ
+		//å®Œæˆæœç´¢åŠŸèƒ½
 		List<HashMap<String, Object>> audios=audioService.search(filename,null);
 		model.addAttribute("audios", audios);
 		
@@ -113,26 +166,26 @@ public class AudioController {
 	/*
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public String search1(String filename, Model model){
-		//Íê³ÉËÑË÷¹¦ÄÜ
+		//å®Œæˆæœç´¢åŠŸèƒ½
 		List<HashMap<String, Object>> audios=audioService.search(filename);
 		model.addAttribute("audios", audios);
 		
 		return "result";
 	}*/
 	
-	//Í¨¹ıSpringµÄautowired×¢½â»ñÈ¡springÄ¬ÈÏÅäÖÃµÄrequest 
+	//é€šè¿‡Springçš„autowiredæ³¨è§£è·å–springé»˜è®¤é…ç½®çš„request 
 	@Autowired
 	private HttpServletRequest request; 
 	  
 	/*** 
-	 * ÉÏ´«ÎÄ¼ş ÓÃ@RequestParam×¢½âÀ´Ö¸¶¨±íµ¥ÉÏµÄfileÎªMultipartFile 
+	 * ä¸Šä¼ æ–‡ä»¶ ç”¨@RequestParamæ³¨è§£æ¥æŒ‡å®šè¡¨å•ä¸Šçš„fileä¸ºMultipartFile 
 	 * 
 	 * @param file 
 	 * @return 
 	 */
 	@RequestMapping("record2local") 
 	public String record2local(@RequestParam("audio_data") MultipartFile audio_data,  Model model) { 
-		// ÅĞ¶ÏÎÄ¼şÊÇ·ñÎª¿Õ 
+		// åˆ¤æ–­æ–‡ä»¶æ˜¯å¦ä¸ºç©º 
 		String filename=audio_data.getOriginalFilename();
 		char[] fname=filename.toCharArray();
 		for (int i=0; i<filename.length(); i++){
@@ -143,14 +196,14 @@ public class AudioController {
 		filename=fname.toString();
 		if (!audio_data.isEmpty()) { 
 			try { 
-		        // ÎÄ¼ş±£´æÂ·¾¶  upload  request.getSession().getServletContext().getRealPath("/") + "fileUpload/"+audio_data.getOriginalFilename();
+		        // æ–‡ä»¶ä¿å­˜è·¯å¾„  upload  request.getSession().getServletContext().getRealPath("/") + "fileUpload/"+audio_data.getOriginalFilename();
 		        String filePath = request.getSession().getServletContext().getRealPath("/") + "fileUpload/"
 		            + filename; 
-		        // ×ª´æÎÄ¼ş 
+		        // è½¬å­˜æ–‡ä»¶ 
 		        File file = new File(filePath);
 		        audio_data.transferTo(file); 
 		        char[] realfname=file.getName().toCharArray();
-		        File realfile= new File("D:\\Z_±ÏÉè\\ÒôÆµËØ²Ä\\test\\"+file.getName()+".wav");
+		        File realfile= new File("D:\\Z_graduation\\"+file.getName()+".wav");
 		        file.renameTo(realfile);
 		        System.out.println("filename:"+filename+",file:"+file.getPath()+",realfilename:"+realfile.getPath());
 		        //resampling
@@ -172,9 +225,9 @@ public class AudioController {
 			        sourceFormat.isBigEndian()
 				);
 				System.out.println("fs:"+targetFormat.getSampleRate()+"channels:"+targetFormat.getChannels()+"endian:"+targetFormat.isBigEndian());
-				filename="C:\\Users\\yy\\Desktop\\"+filename+".wav";
+				filename="D:\\Z_graduation\\2\\"+filename+".wav";
 				final AudioInputStream resampledStream = AudioSystem.getAudioInputStream(targetFormat, sourceStream);
-				//±£´æÎÄ¼ş
+				//ä¿å­˜æ–‡ä»¶
 				try {
 					AudioSystem.write(resampledStream, AudioFileFormat.Type.WAVE, new File(filename));
 				} catch (IOException e) {
@@ -188,12 +241,12 @@ public class AudioController {
 		
 		model.addAttribute("filename", filename);
 		
-	    // ÖØ¶¨Ïò 
+		// é‡å®šå‘ 
 	    return "redirect:search"; 
 	  } 
 	  
 	  /*** 
-	   * ¶ÁÈ¡ÉÏ´«ÎÄ¼şÖĞµÃËùÓĞÎÄ¼ş²¢·µ»Ø 
+	   * è¯»å–ä¸Šä¼ æ–‡ä»¶ä¸­å¾—æ‰€æœ‰æ–‡ä»¶å¹¶è¿”å› 
 	   * 
 	   * @return 
 	   */
@@ -204,7 +257,7 @@ public class AudioController {
 	    File uploadDest = new File(filePath); 
 	    String[] fileNames = uploadDest.list(); 
 	    for (int i = 0; i < fileNames.length; i++) { 
-	      //´òÓ¡³öÎÄ¼şÃû 
+	      //æ‰“å°å‡ºæ–‡ä»¶å 
 	      System.out.println(fileNames[i]); 
 	    } 
 	    return mav; 

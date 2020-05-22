@@ -11,25 +11,25 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("FieldCanBeLocal")
 public class Fingerprint {
-    private final int NPeaks = 3;       // Ò»¸öÖÜÆÚ£¨´°¿ÚÖĞ£¿£¿£©ÖĞÃ¿¸ö×Ó´øµÄ·åÖµµãµÄ¸öÊı
-    private final int fftSize = 512;    // FFTµÄ´°¿Ú´óĞ¡N
-    private final int overlap = 256;    // FFTµÄ´°¿ÚÖØµş´óĞ¡
-    private final int C = 32;           // Ò»¸öÖÜÆÚ°üº¬¶àÉÙ¸ö´°¿Ú£¿
-    private final int peakRange = 5;    // È¡·åÖµµãÊ±Óë¶à´ó·¶Î§µÄÁÚ¾Ó±È½Ï
+    private final int NPeaks = 3;       // ä¸€ä¸ªå‘¨æœŸï¼ˆçª—å£ä¸­ï¼Ÿï¼Ÿï¼‰ä¸­æ¯ä¸ªå­å¸¦çš„å³°å€¼ç‚¹çš„ä¸ªæ•°
+    private final int fftSize = 512;    // FFTçš„çª—å£å¤§å°N
+    private final int overlap = 256;    // FFTçš„çª—å£é‡å å¤§å°
+    private final int C = 32;           // ä¸€ä¸ªå‘¨æœŸåŒ…å«å¤šå°‘ä¸ªçª—å£ï¼Ÿ
+    private final int peakRange = 5;    // å–å³°å€¼ç‚¹æ—¶ä¸å¤šå¤§èŒƒå›´çš„é‚»å±…æ¯”è¾ƒ
 
     private final ArrayList<Peak> peakList = new ArrayList<>();
     private final ArrayList<Link> linkList = new ArrayList<>();
     private final float[] freq;
     private final float[] time;
 
-    private final float[] range_time = {1f, 3f};       // È¡µã¶ÔµÄÊ±ºòµÄÊ±¼ä·¶Î§£¬µ¥Î»ÎªÃë
-    private final float[] range_freq = {-600f, 600f};  // È¡µã¶ÔµÄÊ±ºòµÄÆµÂÊ·¶Î§£¬µ¥Î»ÎªÆµÂÊ
+    private final float[] range_time = {1f, 3f};       // å–ç‚¹å¯¹çš„æ—¶å€™çš„æ—¶é—´èŒƒå›´ï¼Œå•ä½ä¸ºç§’
+    private final float[] range_freq = {-600f, 600f};  // å–ç‚¹å¯¹çš„æ—¶å€™çš„é¢‘ç‡èŒƒå›´ï¼Œå•ä½ä¸ºé¢‘ç‡
     //private final float[] melBand = MelFreq.MelBand(new float[] {150f, 550f, 950f, 1350f, 1750f});
-    private final int[] Band = {11,22,35,50,69,91,117,149,187,231};  // ·Ö³ÉµÄ×Ó´ø£¬Öµ¶ÔÓ¦FFT²úÉúµÄÊı×éË÷Òı
+    private final int[] Band = {11,22,35,50,69,91,117,149,187,231};  // åˆ†æˆçš„å­å¸¦ï¼Œå€¼å¯¹åº”FFTäº§ç”Ÿçš„æ•°ç»„ç´¢å¼•
 
-    private final float minFreq = 100;   // ×îĞ¡ÆµÂÊ
-    private final float maxFreq = 2000;  // ×î´óÆµÂÊ
-    private final float minPower = 0;    // ×îĞ¡ÄÜÁ¿
+    private final float minFreq = 100;   // æœ€å°é¢‘ç‡
+    private final float maxFreq = 2000;  // æœ€å¤§é¢‘ç‡
+    private final float minPower = 0;    // æœ€å°èƒ½é‡
 
     public Fingerprint(float[] data, float fs) {
         super();
@@ -38,13 +38,13 @@ public class Fingerprint {
         freq = spectrogram.freq;
         time = spectrogram.time;
         
-        ArrayList<Peak> tmp = new ArrayList<>(C * NPeaks);  //32*3 //Ò»¸öÖÜÆÚÄÚÒ»¸ö×Ó´øÉÏµÄ·åÖµµã¸öÊı
+        ArrayList<Peak> tmp = new ArrayList<>(C * NPeaks);  //32*3  //ä¸€ä¸ªå‘¨æœŸå†…ä¸€ä¸ªå­å¸¦ä¸Šçš„å³°å€¼ç‚¹ä¸ªæ•°
         int size = stft.size();                 // 124
         int bandNum = Band.length - 1;          // 10-1?
-        for (int b = 0; b < bandNum; b++) {     //[0,9) ×İÏò±éÀúÃ¿¸ö×Ó´ø
-            for (int i = 0; i < size; i++) {    //[0,124) ºáÏò±éÀúÃ¿Ò»¸ö´°¿Ú
-                if (i != 0) {                   // ·ÇµÚ0¸ö´°¿Ú  
-                    if (i % C == 0 || i == size - 1) {  //Ò»¸öÖÜÆÚ¿ªÊ¼µÄÒ»¸ö´°¿Ú(³ı¿ªµÚ0¸ö´°¿Ú) or ×îºóÒ»¸ö´°¿Ú    //¹ıÂË¼¯ºÏÔªËØ£¬Ò»¸öb×ß4±é´Ëif
+        for (int b = 0; b < bandNum; b++) {     //[0,9) çºµå‘éå†æ¯ä¸ªå­å¸¦
+            for (int i = 0; i < size; i++) {    //[0,124) æ¨ªå‘éå†æ¯ä¸€ä¸ªçª—å£
+                if (i != 0) {                   // éç¬¬0ä¸ªçª—å£ 
+                    if (i % C == 0 || i == size - 1) {  //ä¸€ä¸ªå‘¨æœŸå¼€å§‹çš„ä¸€ä¸ªçª—å£(é™¤å¼€ç¬¬0ä¸ªçª—å£) or æœ€åä¸€ä¸ªçª—å£    //è¿‡æ»¤é›†åˆå…ƒç´ ï¼Œä¸€ä¸ªbèµ°4éæ­¤if
                     	//Filter
                         tmp.removeIf(peak -> {
                             float peakFreq = freq[peak.intFreq];
@@ -53,10 +53,10 @@ public class Fingerprint {
                         tmp.removeIf(peak -> peak.power <= minPower);
                         
                         tmp.sort((o1, o2) ->
-                                        Double.compare(o2.power, o1.power)       //°´ÄÜÁ¿Öµ½µĞòÅÅĞò
+                                        Double.compare(o2.power, o1.power)       //æŒ‰èƒ½é‡å€¼é™åºæ’åº
                         );
-                        int end = tmp.size() < NPeaks ? tmp.size() : NPeaks;    //Õë¶Ô×îºóÒ»¸ö´°¿Ú
-                        peakList.addAll(tmp.subList(0, end));   //[0,end)       //Ò»¸öÖÜÆÚÖ»È¡×î¶àÈı¸ö·åÖµµã  3*9*4
+                        int end = tmp.size() < NPeaks ? tmp.size() : NPeaks;    //é’ˆå¯¹æœ€åä¸€ä¸ªçª—å£
+                        peakList.addAll(tmp.subList(0, end));   //[0,end)       //ä¸€ä¸ªå‘¨æœŸåªå–æœ€å¤šä¸‰ä¸ªå³°å€¼ç‚¹  3*9*4
                         
                         tmp.clear();
                     }
@@ -99,16 +99,16 @@ public class Fingerprint {
                 //}
             }
         }
-        peakList.sort((o1, o2) -> o1.intTime - o2.intTime);  //°´Ê±¼ä£¨´°¿ÚºÅ£©ÉıĞòÅÅÁĞ
+        peakList.sort((o1, o2) -> o1.intTime - o2.intTime);  //æŒ‰æ—¶é—´ï¼ˆçª—å£å·ï¼‰å‡åºæ’åˆ—
         link(true);
     }
 
     private int inBand(int intFreq){
         int size = Band.length;                        //10
-        if(intFreq < Band[0] || intFreq > Band[size - 1]) {   //ÊÇ·ñÔÚ[11,231]Ö®¼ä
+        if(intFreq < Band[0] || intFreq > Band[size - 1]) {   //æ˜¯å¦åœ¨[11,231]ä¹‹é—´
             return -1;
         }
-        for(int i = 0; i < size - 1; i ++){       //ÅĞ¶ÏÔÚÄÄ¸ö×Ó´øÀï
+        for(int i = 0; i < size - 1; i ++){       //åˆ¤æ–­åœ¨å“ªä¸ªå­å¸¦é‡Œ
             if(Band[i + 1] > intFreq)
                 return i;                          //1
         }
@@ -127,14 +127,14 @@ public class Fingerprint {
             int tStart;
             int tEnd;
             int k;
-            for (k = i + 1; k < n; k++) {        //[i+1,51) , ÕÒµ½Ò»¸ö±Èp1µÄÊ±³¤¶à1sÒÔÉÏµÄµã
+            for (k = i + 1; k < n; k++) {        //[i+1,51) , æ‰¾åˆ°ä¸€ä¸ªæ¯”p1çš„æ—¶é•¿å¤š1sä»¥ä¸Šçš„ç‚¹
                 float t = time[p1.intTime];
                 float t2 = time[peakList.get(k).intTime];
                 if (t2 - t >= range_time[0])
                     break;
             }                                    //k=10
             tStart = k;               //10
-            for (; k < n; k++) {                 //[10,51) , ÕÒµ½Ò»¸ö±Èp1µÄÊ±³¤¶à3sÒÔÉÏµÄµã
+            for (; k < n; k++) {                //[10,51) , æ‰¾åˆ°ä¸€ä¸ªæ¯”p1çš„æ—¶é•¿å¤š3sä»¥ä¸Šçš„ç‚¹
                 float t = time[p1.intTime];
                 float t2 = time[peakList.get(k).intTime];
                 if (t2 - t >= range_time[1])
@@ -158,11 +158,11 @@ public class Fingerprint {
                     int b2 = inBand(p2.intFreq);        //k=12 b2=3
 
                     //TODO
-                    if(b1 == b2 && b1 != -1){           //ÒªÇóÄ¿±êÇøÓòµÄµãºÍÃªµãÔÚÍ¬Ò»¸ö×Ó´øÄÚ
+                    if(b1 == b2 && b1 != -1){           //è¦æ±‚ç›®æ ‡åŒºåŸŸçš„ç‚¹å’Œé”šç‚¹åœ¨åŒä¸€ä¸ªå­å¸¦å†…
                         Link l = new Link(p1, p2);
                         linkList.add(l);
                      }
-                } else {       //£¿£¿£¿
+                } else {       //???
                     if (freq[p2.intFreq] >= fstart && freq[p2.intFreq] <= fend) {
                         Link l = new Link(p1, p2);
                         linkList.add(l);
@@ -181,17 +181,17 @@ public class Fingerprint {
         return peakList;
     }
 
-    public static class Peak {     //·åÖµµã
-        public int intFreq;        //×ø±ê
+    public static class Peak {     //å³°å€¼ç‚¹
+        public int intFreq;        //åæ ‡
         public float power;
         public int intTime;
     }
 
-    public static class Link {           //µã¶Ô
-        public final Peak start;         //Ê±¼ä¿¿Ç°µÄµãstart(t1,f1)
-        public final Peak end;           //Ê±¼ä¿¿ºóµÄµãend(t2,f2)
+    public static class Link {           //ç‚¹å¯¹
+        public final Peak start;         //æ—¶é—´é å‰çš„ç‚¹start(t1,f1)
+        public final Peak end;           //æ—¶é—´é åçš„ç‚¹end(t2,f2)
 
-        final float[] tmp = new float[3];  //Ö¸ÎÆ
+        final float[] tmp = new float[3];  //æŒ‡çº¹
 
         public Link(Peak s, Peak e) {
             super();

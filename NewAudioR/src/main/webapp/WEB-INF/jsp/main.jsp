@@ -26,9 +26,9 @@
       <div class="menu">
         <div class="icon"><a href="${html }/home.html" target="homeFrame"><i class="fa fa-home"></i></a></div>
         <div class="subMenu">
-          <div class="icon"><a href="${html }/review.html" target="homeFrame" class="field-tip"><i class="fa fa-database"></i><span class="tip-content">音乐库显示1</span></a></div>
+          <div class="icon"><a href="listmusic" target="homeFrame" class="field-tip"><i class="fa fa-database"></i><span class="tip-content">音乐库显示1</span></a></div>
           <div class="icon"><a href="searchpage" target="homeFrame" class="field-tip"><i class="fa fa-filter"></i><span class="tip-content">搜索</span></a></div>
-          <div class="icon"><a href="test" target="homeFrame" class="field-tip"><i class="fa fa-puzzle-piece"></i><span class="tip-content">测试</span></a></div>
+          <div class="icon"><a href="testpage" target="homeFrame" class="field-tip"><i class="fa fa-puzzle-piece"></i><span class="tip-content">测试</span></a></div>
           <div class="icon"><a href="https://oscar-oliveira.github.io/Instance-2D-Viewer/" target="homeFrame" class="field-tip"><i class="fa fa-object-group"></i><span class="tip-content">Audio Recognizition</span></a></div>
           <div class="icon"><a href="https://oscar-oliveira.github.io/CSP-2D-Viewer/" target="homeFrame" class="field-tip"><i class="fa fa-square-full"></i><span class="tip-content">2D cutting plan viewer</span></a></div>
           <div class="icon"><a href="https://oscar-oliveira.github.io/BPP-3D-Viewer/" target="homeFrame"class="field-tip"><i class="fa fa-cube"></i><span class="tip-content">3D cutting plan viewer</span></a></a></div>

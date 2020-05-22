@@ -27,7 +27,7 @@ public class FileHandle {
         
         ArrayList<String> nameList=new ArrayList<String>();
 
-        //´¦ÀíÎÄ¼ş£¬ÒÆ½»insert¸øÏÂÒ»²ã
+      //å¤„ç†æ–‡ä»¶ï¼Œç§»äº¤insertç»™ä¸‹ä¸€å±‚
         for (String aName : name) {
             if(!aName.substring(aName.length() - 4).equals(".wav"))
                 continue;

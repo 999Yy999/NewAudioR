@@ -61,6 +61,32 @@
          </foreach>  
   </select>
  
+  <select id="getTotalCount" resultType="int">
+  	select 
+  	count(idmusicinfo) 
+  	from  musicinfo
+   </select>
+  
+   <select id="getMusicByPage" resultType="java.util.HashMap">
+	  <bind name="startpage" value="pc * ps - ps" />
+	  <bind name="pagesize" value="ps" />
+	    SELECT 
+	  	*
+	  	FROM musicinfo 
+	  	limit #{startpage},#{pagesize}
+  </select>
+ 
+   <delete id="deleteAudio1">
+	  delete from
+	  musicinfo
+	  where idmusicinfo = #{id}
+   </delete>
+   <delete id="deleteAudio2">
+	  delete from
+	  hashtable
+	  where id = #{id}
+   </delete>
+ 	
  
 </mapper>
   

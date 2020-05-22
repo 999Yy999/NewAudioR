@@ -1,8 +1,8 @@
 package com.audio.util.spectrogram;
 
 public class Window {
-    private static final int RECT = 1;    // ¾ØĞÎ´°¿Ú
-    public static final int HANN = 2;     // ººÃ÷´°¿Ú
+    private static final int RECT = 1;    // çŸ©å½¢çª—å£
+    public static final int HANN = 2;     // æ±‰æ˜çª—å£
 
     private final float[] window;
     private final int windowSize;
@@ -24,14 +24,14 @@ public class Window {
 
     public float[] window(float[] data, int pos){
         int size = windowSize;
-        if(pos + size > data.length){          //´¦Àí×îºóÒ»¸ö´°¿Ú
+        if(pos + size > data.length){           //å¤„ç†æœ€åä¸€ä¸ªçª—å£
             size = data.length - pos;
         }
         float[] win = new float[windowSize];   // des:win[0,size-1]
         System.arraycopy(data,pos,win,0,size); // src:data[pos]-data[pos+size-1]
 
         for(int i = 0; i < win.length ; i ++){
-            win[i] = win[i] * window[i];          //¼Ó´°
+            win[i] = win[i] * window[i];          //åŠ çª—
         }
         
         return win;
