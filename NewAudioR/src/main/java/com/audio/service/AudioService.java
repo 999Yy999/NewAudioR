@@ -26,6 +26,7 @@ public interface AudioService {
 
 	public List<HashMap<String, Object>> deleteMusicById(Integer id);
 
+	public List<HashMap<String, Object>> helpsearch(String filename, String artist, String album);
+
 	//List<HashMap<String, Object>> search(String filename, float[] data1);
-	
 }

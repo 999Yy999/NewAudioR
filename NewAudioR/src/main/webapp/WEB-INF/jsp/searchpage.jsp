@@ -28,13 +28,24 @@
     <h1><span class="icon"><i class="fa fa-filter"></i></span> Record & Search</h1>
     
     <div id="controls">
-     <fieldset>
-     	 <legend>Record</legend>
+    <fieldset>
+    	  <legend>录制音乐</legend>
+     	  <fieldset>
+	     	 <legend>辅助搜索项:歌手</legend>
+		  	 <input type="text" name="artist" id="artist" placeholder="Ex.: 莫文蔚">
+	  	 </fieldset>
+	  	  <fieldset>
+	  	  	<legend>辅助搜索项:专辑</legend>
+	  	 	<input type="text" name="album" id="album" placeholder="Ex.: 那么骄傲">
+	  	 </fieldset>
+     	 
 	  	 <div id="recordButton" class="filter" style="margin-top: 5px;">录制</button></div>
 	  	  <div id="pauseButton" disabled class="filter" style="margin-top: 5px;">暂停</button></div>
-	  	  <div id="stopButton" disabled class="filter" style="margin-top: 5px;">停止</button>
+	  	  <div id="stopButton" disabled class="filter" style="margin-top: 5px;">停止&提交</button>
 	 </fieldset>
 	 <div id="formats">点击录制可看到采样率</div>
+	 
+	 
     </div>
      <!-- <p>
       <fieldset>
@@ -59,6 +70,8 @@
             <th>录音编号</th>
             <th>时长</th>
             <th>播放</th>
+            <th>歌手</th>
+            <th>专辑</th>
             <th>搜索</th>
           </tr>
         </thead>

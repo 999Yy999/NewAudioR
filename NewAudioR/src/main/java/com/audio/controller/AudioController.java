@@ -163,6 +163,18 @@ public class AudioController {
 		return "result";
 	}
 	
+	//辅助项识别
+	@RequestMapping(value="/helpsearch", method=RequestMethod.GET)
+	public String helpsearch(String filename, String artist, String album, Model model){
+		//完成搜索功能
+		List<HashMap<String, Object>> audios=audioService.helpsearch(filename,artist,album);
+		model.addAttribute("audios", audios);
+		
+		return "result";
+	}
+	
+	
+	
 	/*
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public String search1(String filename, Model model){
@@ -184,7 +196,7 @@ public class AudioController {
 	 * @return 
 	 */
 	@RequestMapping("record2local") 
-	public String record2local(@RequestParam("audio_data") MultipartFile audio_data,  Model model) { 
+	public String record2local(@RequestParam("audio_data") MultipartFile audio_data, String artist, String album, Model model) { 
 		// 判断文件是否为空 
 		String filename=audio_data.getOriginalFilename();
 		char[] fname=filename.toCharArray();
@@ -194,6 +206,7 @@ public class AudioController {
 			}
 		}
 		filename=fname.toString();
+		// 修改采样率并将文件转存到本地
 		if (!audio_data.isEmpty()) { 
 			try { 
 		        // 文件保存路径  upload  request.getSession().getServletContext().getRealPath("/") + "fileUpload/"+audio_data.getOriginalFilename();
@@ -238,11 +251,18 @@ public class AudioController {
 				e.printStackTrace(); 
 			} 
 	    } 
-		
 		model.addAttribute("filename", filename);
-		
-		// 重定向 
-	    return "redirect:search"; 
+		model.addAttribute("artist", artist);
+		model.addAttribute("album", album);
+		//如果辅助项为空
+		if (artist=="" && album==""){
+			// 重定向 
+		    return "redirect:search";
+		}
+		//如果不为空
+		else{
+			return "redirect:helpsearch";
+		}
 	  } 
 	  
 	  /*** 

@@ -63,6 +63,30 @@ public class AudioServiceImpl implements AudioService{
     Music music=new Music();
   //D:\Z_毕设\Others Project\Audio-Fingerprinting-master\songs\泡沫\泡沫4s.wav
   
+    
+    @Override
+	public List<HashMap<String, Object>> helpsearch(String filename, String artist, String album) {
+    	// 先识别出所有相似歌曲（代码冗余了，改）
+    	float data[];
+    	File file=new File(filename);
+    	ReadAudioFile readFile = new ReadAudioFile(); 
+    	try {
+			data=readFile.readFile(file);
+			Fingerprint fp=new Fingerprint(data, fs);
+			setHashTime(fp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+    	int[] id = search(linkTime, linkHash, minHit);
+    	
+    	// 再根据歌手、专辑来二次筛选
+    	
+    	// 从中选出相似度高的前三首歌曲
+    	
+		return null;
+	}
+    
+    
 	@Override
 	public List<HashMap<String,Object>> search(String filename, float[] data1) {
 		File file=new File(filename);
@@ -70,8 +94,8 @@ public class AudioServiceImpl implements AudioService{
 		
 		ReadAudioFile readFile = new ReadAudioFile(); 
 		try {
-			if (data1!=null){data=data1;}
-			else data=readFile.readFile(file);
+			if (data1!=null){data=data1;}             //测试时截取音乐片段直接传的data浮点型数组过来
+			else data=readFile.readFile(file);        //通过音乐文件名获取音频浮点型数据
 			Fingerprint fp=new Fingerprint(data, fs);
 			setHashTime(fp);
 		} catch (Exception e) {

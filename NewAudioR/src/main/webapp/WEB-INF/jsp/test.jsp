@@ -47,24 +47,24 @@
         </fieldset>
         <fieldset class="ft">
           <legend>时长</legend>
-          <input id="tl4" type="radio" name="time" value="mode1"><label for="r1960"><span><span id="p1960">Mode1:小于4s</span></span></label>
-          <input id="t410" type="radio" name="time" value="mode2" checked="checked"><label for="r1970"><span><span id="p1970">Mode2:大于等于4秒&小于10秒</span></span></label>
-          <input id="th10" type="radio" name="time" value="mode3"><label for="r1980"><span><span id="p1980">Mode3:大于等于10秒</span></span></label>
+          <input id="tl4" type="radio" name="time" value="mode1"><label for="r1960"><span><span id="p1960">小于4s</span></span></label>
+          <input id="t410" type="radio" name="time" value="mode2"><label for="r1970"><span><span id="p1970">大于等于4秒&小于10秒</span></span></label>
+          <input id="th10" type="radio" name="time" value="mode3"><label for="r1980"><span><span id="p1980">大于等于10秒</span></span></label>
         </fieldset>
         <fieldset class="ft">
           <legend>白噪声强度(dBFS)</legend>
           <input id="f0" type="radio" name="fre" value="0"><label for="f0"><span><span id="f0">无</span></span></label>
           <input id="f2" type="radio" name="fre" value="2"><label for="f2"><span><span id="f2">-80</span></span></label>
           <input id="f10" type="radio" name="fre" value="10"><label for="f10"><span><span id="f10">-70</span></span></label>
-          <input id="f20" type="radio" name="fre" value="20" checked="checked"><label for="f20"><span><span id="f20">-60</span></span></label>
+          <input id="f20" type="radio" name="fre" value="20"><label for="f20"><span><span id="f20">-60</span></span></label>
           <input id="f30" type="radio" name="fre" value="30"><label for="f30"><span><span id="f30">-50</span></span></label>
           <input id="f40" type="radio" name="fre" value="40"><label for="f40"><span><span id="f40">-40</span></span></label>
           
         </fieldset>
         <fieldset class="ft">
           <legend>测试样例数</legend>
-          <input id="s1" type="radio" name="sample" value="1" checked="checked"><label for="s1"><span><span id="s1">1</span></span></label>
-          <input id="s3" type="radio" name="sample" value="3" checked="checked"><label for="s3"><span><span id="s3">3</span></span></label>
+          <input id="s1" type="radio" name="sample" value="1"><label for="s1"><span><span id="s1">1</span></span></label>
+          <input id="s3" type="radio" name="sample" value="3"><label for="s3"><span><span id="s3">3</span></span></label>
           <input id="s10" type="radio" name="sample" value="10"><label for="s10"><span><span id="s10">10</span></span></label>
           <input id="s100" type="radio" name="sample" value="100"><label for="s100"><span><span id="s100">100</span></span></label>
           <input id="s200" type="radio" name="sample" value="200"><label for="s200"><span><span id="s200">200</span></span></label>

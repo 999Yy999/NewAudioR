@@ -214,9 +214,12 @@ function add(blob){
 	var search=document.createElement("td");
 	//var a=document.createElement("a");
 	//var aplay=document.createElement("a");
+	var tdinputartist=document.createElement("td");
+	var tdinputalbum=document.createElement("td");
 	
 	var filename = new Date().toISOString();
-	
+	var vartist=document.getElementById("artist").value;
+	var valbum=document.getElementById("album").value;
 	
 	//a.href=au.src;
 	///a.download=filename+".wav";
@@ -232,6 +235,8 @@ function add(blob){
 	id.innerHTML=num;
 	dur.innerHTML=au.duration;
 	//url.innerHTML=au.src;
+	tdinputartist.innerHTML=vartist;
+	tdinputalbum.innerHTML=valbum;
 	
 	//xm.innerHTML="第"+num+"学生";
 	//var search=document.createElement("td");
@@ -247,7 +252,10 @@ function add(blob){
 	tr.appendChild(play);
 	//url.appendChild(a);
 	play.appendChild(au);
-
+	tr.appendChild(tdinputartist);
+	tr.appendChild(tdinputalbum);
+	
+	var req="?artist="+vartist+"&album="+valbum;
 	var upload = document.createElement('a');
 	//upload.href="#";
 	upload.innerHTML = "Search";
@@ -264,7 +272,7 @@ function add(blob){
 		  };
 		  var fd=new FormData();
 		  fd.append("audio_data",blob, filename);
-		  xhr.open("POST","record2local",true);  //异步
+		  xhr.open("POST","record2local"+req,true);  //异步
 		  xhr.send(fd);
 	})
 	tr.appendChild(search);
