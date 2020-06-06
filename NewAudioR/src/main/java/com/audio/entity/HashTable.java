@@ -6,16 +6,16 @@ import com.audio.util.fingerprint.Fingerprint;
 public class HashTable {
 	private int hashtableid;
 	private int hash;
-	private int id;
+	private long id;
 	private int time;
 	
 	public HashTable(){
 		super();
 	}
 	
-	public HashTable(int id,Fingerprint.Link link){
+	public HashTable(long id2,Fingerprint.Link link){
 		super();
-        this.id = id;
+        this.id = id2;
         this.time = link.start.intTime;     //t1
         this.hash = Hash.hash(link);        //
 	}
@@ -32,7 +32,7 @@ public class HashTable {
 	public void setHash(int hash) {
 		this.hash = hash;
 	}
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	public void setId(int id) {

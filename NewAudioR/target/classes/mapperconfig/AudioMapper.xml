@@ -39,9 +39,9 @@
   	*
   	FROM musicinfo
   	WHERE idmusicinfo in
-  		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
-             #{item}  
-        </foreach> 
+	<foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+           #{item}  
+    </foreach> 
   </select>
  
   <!-- select id="searchAllAudios" resultType="com.audio.entity.Music">
@@ -87,6 +87,5 @@
 	  where id = #{id}
    </delete>
  	
- 
 </mapper>
   

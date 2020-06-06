@@ -1,12 +1,27 @@
 package com.audio.entity;
 
 public class Music {
-	private int idmusicinfo;
+	private long idmusicinfo;
 	private String title;
 	private String artist;
 	private String album;
 	private String filedir;
 	private String infodir;
+	
+	public Music(){}
+	
+	public Music(long id, String title, String artist, String album, String filedir, String infodir){
+		this.idmusicinfo=id;
+		this.title=title;
+		this.artist=artist;
+		this.album=album;
+		this.filedir=filedir;
+		this.infodir=infodir;
+	}
+	
+	public void showMusicInfo(){
+		System.out.println("id:"+this.getIdmusicinfo()+",title:"+this.getTitle()+",artist:"+this.getArtist()+",album:"+this.getAlbum()+",filedir:"+this.getFiledir()+",infodir:"+this.getInfodir());
+	}
 	
 	public String getInfodir() {
 		return infodir;
@@ -14,10 +29,10 @@ public class Music {
 	public void setInfodir(String infodir) {
 		this.infodir = infodir;
 	}
-	public int getIdmusicinfo() {
+	public long getIdmusicinfo() {
 		return idmusicinfo;
 	}
-	public void setIdmuiscinfo(int idmusicinfo) {
+	public void setIdmuiscinfo(long idmusicinfo) {
 		this.idmusicinfo = idmusicinfo;
 	}
 	public String getTitle() {

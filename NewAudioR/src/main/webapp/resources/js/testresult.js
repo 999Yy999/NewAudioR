@@ -15,10 +15,12 @@ var req;
 function add(){
 	var vzql1,vzql2;
 	var sendDate,receiveDate,responseTimeMs;
+	var showfzsearch;
+	var fzsearch=$('input[name=fzsearch]:checked').val();
 	var time = $('input[name=time]:checked').val();
   	var fre = $('input[name=fre]:checked').val();
   	var samplenum = $('input[name=sample]:checked').val();
-	req="test?time="+time+"&fre="+fre+"&sample="+samplenum;
+	req="test?fzsearch="+fzsearch+"&time="+time+"&fre="+fre+"&sample="+samplenum;
 	//发送请求
 	var xhr=new XMLHttpRequest();
 	  //alert("1:"+xhr.readyState);
@@ -64,6 +66,7 @@ function add(){
 	      	var tr=document.createElement("tr");
 	      	// 1.新建一项
 	      	var id=document.createElement("td");
+	      	var fzsearchtd=document.createElement("td");
 	      	var dur=document.createElement("td");
 	      	var noise=document.createElement("td");
 	      	var sample=document.createElement("td");
@@ -85,8 +88,12 @@ function add(){
 	    	case "mode2": durtime="4s<=时长<10s"; break;
 	    	case "mode3": durtime="时长>=10s"; break;
 	    	}
-	      	
+	      	switch(fzsearch){
+	      	case "1": showfzsearch="是"; break;
+	      	case "0": showfzsearch="否"; break;
+	      	}
 	      	// 2.填内容
+	      	fzsearchtd.innerHTML=showfzsearch;
 	      	dur.innerHTML=durtime;
 	      	noise.innerHTML=fre;
 	      	sample.innerHTML=samplenum;
@@ -97,8 +104,9 @@ function add(){
 	      	var tab=document.getElementById("table");
 	      	var tbody=document.getElementById("tbody");
 	      	tbody.appendChild(tr);
-	      	// 3.id加到表里
+	      	// 3.td加到表里
 	      	tr.appendChild(id);
+	      	tr.appendChild(fzsearchtd);
 	      	tr.appendChild(dur);
 	      	tr.appendChild(noise);
 	      	tr.appendChild(sample);

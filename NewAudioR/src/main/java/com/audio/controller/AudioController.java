@@ -110,7 +110,7 @@ public class AudioController {
 		
 	//测试
 	@RequestMapping(value="/test", method=RequestMethod.POST)
-	public String test(String time, int fre, int sample, Model model){
+	public String test(String isFZSearch, String time, int fre, int sample, Model model){
 		//完成搜索功能
 		//List<HashMap<String, Object>> audios=audioService.search(filename);
 		//double[] zql=audioService.test(time, fre, sample);

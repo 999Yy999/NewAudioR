@@ -42,8 +42,9 @@
       <!-- form action="test" method="POST"> -->
       <fieldset>
         <fieldset id="filter" class="ft">
-          <legend>Search word</legend>
-          <input type="text" name="searchword" id="searchword" placeholder="Ex.: Column generation">
+          <legend>是否加入辅助项检索</legend>
+          <input id="yes" type="radio" name="fzsearch" value="1"><label for="yes"><span><span id="yes">是</span></span></label>
+          <input id="no" type="radio" name="fzsearch" value="0"><label for="no"><span><span id="yes">否</span></span></label>
         </fieldset>
         <fieldset class="ft">
           <legend>时长</legend>
@@ -86,6 +87,7 @@
         <thead>
           <tr>
             <th>编号</th>
+            <th>是否加入辅助识别</th>
             <th>时长</th>
             <th>白噪声强度(dBFS)</th>
             <th>测试样例数</th>

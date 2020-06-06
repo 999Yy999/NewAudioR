@@ -21,6 +21,7 @@ public interface AudioMapper {
 	public List<HashMap<String, Object>> getMusicByPage(@Param("pc") int pc, @Param("ps") int ps);
 	public void deleteAudio1(Integer id);
 	public void deleteAudio2(Integer id);
+	//public List<HashMap<String, Object>> searchAudiosByConditions(@Param("id") int[] id, @Param("artist") String artist, @Param("album") String album);
 	
 	//public List<HashTable> searchAllAudios(Map linkHash);
 }
