@@ -11,7 +11,7 @@ body {
 
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #495570;
+  background-color: #b3dfe3;
   vertical-align: bottom;
 }
 
@@ -21,7 +21,16 @@ body {
   right: 0;
 }
 
-#articles {
+
+.functions {
+  padding: 5px;
+  color: #000;
+  font-weight: 300;
+  font-size: 50px;
+  text-align: right;
+}
+
+#musics {
   padding: 5px;
   color: #e2f2fe;
   font-weight: 300;

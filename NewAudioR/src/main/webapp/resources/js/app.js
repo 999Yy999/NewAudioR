@@ -85,11 +85,11 @@ function pauseRecording(){
 	if (rec.recording){
 		//pause
 		rec.stop();
-		pauseButton.innerHTML="继续";
+		pauseButton.innerHTML="继续录制";
 	}else{
 		//resume
 		rec.record()
-		pauseButton.innerHTML="暂停";
+		pauseButton.innerHTML="暂停录制";
 
 	}
 }
@@ -103,7 +103,7 @@ function stopRecording() {
 	pauseButton.disabled = true;
 
 	//reset button just in case the recording is stopped while paused
-	pauseButton.innerHTML="暂停";
+	pauseButton.innerHTML="暂停录制";
 	
 	//tell the recorder to stop the recording
 	rec.stop();
@@ -119,6 +119,7 @@ function createDownloadLink(blob) {
 	
 	var url = URL.createObjectURL(blob);
 	au = document.createElement('audio');
+	
 	var li = document.createElement('li');
 	var link = document.createElement('a');
 
@@ -207,7 +208,7 @@ function add(blob){
 	var tr=document.createElement("tr");
 	// 新建一项
 	var id=document.createElement("td");
-	var dur=document.createElement("td");
+	//var dur=document.createElement("td");
 	//var noise=document.createElement("td");
 	//var url=document.createElement("td");
 	var play=document.createElement("td");
@@ -220,7 +221,13 @@ function add(blob){
 	var filename = new Date().toISOString();
 	var vartist=document.getElementById("artist").value;
 	var valbum=document.getElementById("album").value;
-	
+	var invartist,invalbum;
+	if (vartist==""){
+		invartist="无";
+	}
+	if (valbum==""){
+		invalbum="无";
+	}
 	//a.href=au.src;
 	///a.download=filename+".wav";
 	//a.innerHTML="下载";
@@ -233,10 +240,19 @@ function add(blob){
 	
 	//id内容
 	id.innerHTML=num;
-	dur.innerHTML=au.duration;
+	
+	//dur.innerHTML=au.duration;
 	//url.innerHTML=au.src;
-	tdinputartist.innerHTML=vartist;
-	tdinputalbum.innerHTML=valbum;
+	if (vartist==""){
+		tdinputartist.innerHTML=invartist;
+	}else{
+		tdinputartist.innerHTML=vartist;
+	}
+	if(valbum==""){
+		tdinputalbum.innerHTML=invalbum;
+	}else{
+		tdinputalbum.innerHTML=valbum;
+	}
 	
 	//xm.innerHTML="第"+num+"学生";
 	//var search=document.createElement("td");
@@ -246,7 +262,7 @@ function add(blob){
 	tbody.appendChild(tr);
 	//id加到表里
 	tr.appendChild(id);
-	tr.appendChild(dur);
+	//tr.appendChild(dur);
 	//tr.appendChild(noise);
 	//tr.appendChild(url);
 	tr.appendChild(play);
@@ -258,7 +274,7 @@ function add(blob){
 	var req="?artist="+vartist+"&album="+valbum;
 	var upload = document.createElement('a');
 	//upload.href="#";
-	upload.innerHTML = "Search";
+	upload.innerHTML = "识别";
 	upload.addEventListener("click", function(event){
 		  var xhr=new XMLHttpRequest();
 		  //设置响应返回的数据格式

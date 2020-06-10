@@ -60,7 +60,7 @@ public class AudioController {
 		model.addAttribute("musics", musics);
 		
 		// 给定ps的值，每页显示的行数,默认值PageBean给的是每页显示10条
-		int ps = 30;
+		int ps = 10;
 		//将查询的数据封装到分页控件 pc tr  ps beanList
 		PageBean<HashMap<String,Object>> pb = audioService.listMusicByPage(pc,ps);
 		model.addAttribute("pb", pb);

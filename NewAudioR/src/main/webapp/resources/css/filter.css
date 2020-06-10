@@ -14,9 +14,9 @@
 }
 
 .filter {
-  display: block;
+  display: inline;
   border-radius: 5px 5px 5px 5px;
-  background: #495570;
+  background: #008080;
   padding: 10px 12px 10px 12px;
   font-size: 25px;
   text-align: center;
@@ -25,11 +25,40 @@
   line-height: 20px;
   cursor: pointer;
   cursor: hand;
-  box-shadow: 3px 2px 5px #888888;
+  box-shadow: 3px 2px 5px #484b49;
+  
+  padding-left: 60px;
+  padding-right: 60px;
+  margin-right: 60px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-top-width: 0px;
+  border-bottom-width: 0px;
+  border-right-width: 0px;
+  border-left-width: 0px;
 }
 
+.search{
+  display: block;
+  border-radius: 5px 5px 5px 5px;
+  background: #008080;
+  padding: 10px 12px 10px 12px;
+  font-size: 25px;
+  text-align: center;
+  color: white;
+  margin-top: 15px;
+  line-height: 20px;
+  cursor: pointer;
+  cursor: hand;
+  box-shadow: 3px 2px 5px #484b49;
+}
+.search:hover {
+  background: #305f5f;
+}
+
+
 .filter:hover {
-  background: #53627F;
+  background: #305f5f;
 }
 
 #dec {
